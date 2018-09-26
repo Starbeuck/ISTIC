@@ -1,11 +1,28 @@
 import random
     
-def code (message, e, N):
-    return
+def code (message, key):
+    e, N = key;
+    code = []
+    string = ''
+    ascii = stringToAscii(message)
+    for i in ascii:
+        code.append(expomodul(i,e,N))
+        string = string + str(expomodul(i,e,N)) + " "
+    return string
 
-def decode(message, d, N):
-    return
+def decode(message, key):
+    
+    d, N = key
+    tabcode = []
+    string = '';
+    tmp = message.split(' ')
+    message = (int(m) for m in tmp)
+    for m in message:
+        tabcode.append(expomodul(m,d,N))
+    string = asciiToString(tabcode)
+    return string
 
+   
 """convert string to ascii """
 def stringToAscii(message):
     ascii = [];
@@ -24,41 +41,57 @@ def asciiToString(tableau):
     
   
 """
-x  chiffre a elever a la puisance
-n puissance
-m cest le modulo
+x chiffre a elever a la puisance
+y puissance
+N cest le modulo
 """
-def expomodul(a, b, N):
-    res = 1;
-    while (b>0):
-        if(b%2 == 1):
-            res = (res * a)%N
-        b = b/2;
-        a = (a*a)%N
-    return res
-
+def expomodul(x, y, n):
+    """puissance modulaire: (x**y)%n avec x, y et n entiers"""
+    result = 1
+    while y>0:
+        if y&1>0:
+            result = (result*x)%n
+        y >>= 1
+        x = (x*x)%n    
+    return result
+    
 """
-calcul inverse modulaire
+calcul inverse modulaire _ donne d
 e = 3 
 e = 2 ** 16
 """    
-def egcd(a, b):
-    if a == 0:
-        return (b, 0, 1)
-    else:
-        g, y, x = egcd(b % a, a)
-        return (g, x - (b // a) * y, y)
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
 
-def modinv(a, m):
-    g, x, y = egcd(a, m)
-    if g != 1:
-        raise Exception('modular inverse does not exist')
-    else:
-        return x % m
+    
+'''
+Euclid's extended algorithm for finding the multiplicative inverse of two numbers
+'''
+def multiplicative_inverse(e, phi):
+    d = 0
+    x1 = 0
+    x2 = 1
+    y1 = 1
+    temp_phi = phi
+    
+    while e > 0:
+        temp1 = temp_phi/e
+        temp2 = temp_phi - temp1 * e
+        temp_phi = e
+        e = temp2
         
-def expo_modulaire(e, p, q):
-    res = (p-1)*(q-1)
-    return modinv(e, res)
+        x = x2- temp1* x1
+        y = d - temp1 * y1
+        
+        x2 = x1
+        x1 = x
+        d = y1
+        y1 = y
+    
+    if temp_phi == 1:
+        return d + phi
     
 """
 regarde si x est un nombre premier
@@ -76,9 +109,70 @@ def gen_prime(n):
     p = random.randint(2**(n-1),2**n-1)
     if(p%2 == 0):
         p = p+1
-    estPrime = pgp(p)
-    if(estPrime):
+    estPrimeP = pgp(p)
+    if(estPrimeP):
         return p
     else:
         return gen_prime(n)
+        
+def gen_keypair(size):
     
+    p = gen_prime(size)
+    q = gen_prime(size)
+    
+    while ( p == q ):
+        q = gen_prime(size)
+        
+    #n = pq
+    n = p * q
+    
+    #Phi is the totient of n
+    phi = (p-1) * (q-1)
+    
+    #Choose an integer e such that e and phi(n) are coprime
+    e = random.randrange(1, phi)
+    
+    #Use Euclid's Algorithm to verify that e and phi(n) are comprime
+    g = gcd(e, phi)
+    while g != 1:
+        e = random.randrange(1, phi)
+        g = gcd(e, phi)
+        
+    #Use Extended Euclid's Algorithm to generate the private key
+    d = multiplicative_inverse(e, phi)
+    
+    #Return public and private keypair
+    #Public key is (e, n) and private key is (d, n)
+    return ((e, n), (d, n))
+    
+#transform str to key
+def strToKey(str):
+    str = str.replace('(',"")
+    str = str.replace(')',"")
+    str = str.split(',')
+    key = [int(s) for s in str]
+    return key
+    
+     
+""" ROUTINE """
+def new_RSARoutine():
+    print("1_ Encrypt a message !")
+    print("2_ Decrypt a message !")
+    choice = raw_input("What do you want to do ?")
+    choice = int(choice)
+    if(choice == 1):
+        size = int(raw_input("Length of your key :"))
+        public, private = gen_keypair(size)
+        print "Your public key is ", public ," and your private key is ", private
+        message = raw_input("Enter a message to encrypt with your public key: ")
+        print "Your encrypted message is: ", code(message, public)
+    elif(choice == 2):
+        private = raw_input("What is your private key ? ex (d, N) ->")
+        private = strToKey(private)
+        message = raw_input("Enter a message to decrypt with your private key: ")
+        print "Your encrypted message is: ", decode(message, private)
+    else:
+        print "It's not 1 or 2"
+         
+new_RSARoutine()
+   
