@@ -4,7 +4,7 @@
 	lang="en-gb">
 <head>
 
-<title>${param.title}</title>
+<title>SIGN UP</title>
 
 <link rel="stylesheet" href="fichiers/style.css" type="text/css" />
 </head>
@@ -14,20 +14,9 @@
 
 		<br style="clear: both;" />
 
-		
 		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
 			cellpadding="0" width="100%">
 			<tbody>
-				<tr>
-
-					<td class="row1">
-						<p class="breadcrumbs">
-							Connect&eacute; en tant que
-							<%=session.getAttribute("user")%>
-							!
-						</p>
-					</td>
-				</tr>
 				<tr>
 					<td class="row1">
 						<p class="breadcrumbs">
@@ -35,17 +24,16 @@
 						</p>
 					</td>
 				</tr>
-
 			</tbody>
 		</table>
 		<br />
 
-		<form action="login" method="post">
+		<form action="signup" method="post">
 
 			<table class="tablebg" cellspacing="1" width="100%">
 				<tbody>
 					<tr>
-						<th colspan="2">${param.title}</th>
+						<th colspan="2">Sign Up</th>
 					</tr>
 
 					<tr>
@@ -55,40 +43,38 @@
 								align="center">
 								<tbody>
 
-									<c:forEach items="${messages}" var="message">
-										<tr>
-											<td class="row1" align="center" width="5"><p>${message.author}</p></td>
-											<td class="row2" align="center" width="130"><p>${message.text}</p></td>
-										</tr>
-									</c:forEach>
+									<tr>
+										<td valign="top"><b class="gensmall">Choose a login :</b></td>
+										<td><input class="post" name="login" size="25"
+											tabindex="1" type="text"
+											value="<c:out value="${param.login}"/>" /> <span
+											class="erreur">${erreurs['login']}</span></td>
+
+									</tr>
+									<tr>
+										<td valign="top"><b class="gensmall">Choose a
+												password :</b></td>
+										<td><input class="post" name="password" size="25"
+											tabindex="2" type="password"/> <span
+											class="erreur">${erreurs['password']}</span></td>
+									</tr>
+
 
 								</tbody>
 							</table>
 						</td>
 					</tr>
+					<tr>
+						<span class="erreur">${erreurs['already']}</span>
+						<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
+						<td class="cat" colspan="2" align="center"><input
+							name="signup" class="btnmain" value="Create my account !"
+							tabindex="5" type="submit" /></td>
+					</tr>
 				</tbody>
 			</table>
 
 		</form>
-
-		<c:if test="${sessionScope.user != null}">
-			<table cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<c:set var="message">
-							<c:url value="message.jsp">
-								<c:param name="title" value="${param.title}" />
-								<c:param name="author" value="${param.author}" />
-							</c:url>
-						</c:set>
-						<td valign="middle" align="right"><a href="${message}"
-							class="breadcrumbs"><img
-								src="fichiers/button_topic_reply.gif" alt="Post new message"
-								title="Post new message" /></a></td>
-					</tr>
-				</tbody>
-			</table>
-		</c:if>
 
 
 		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"

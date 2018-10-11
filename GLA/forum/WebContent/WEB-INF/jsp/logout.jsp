@@ -27,7 +27,7 @@
 				</table>
 				<br />
 				
-				<p>Vous êtes déconnectés ! </p>
+				<p>Vous êtes déconnecté ! </p>
 				<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
 					cellpadding="0" width="100%">
 					<tbody>

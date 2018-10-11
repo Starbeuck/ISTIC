@@ -21,12 +21,13 @@
 				cellpadding="0" width="100%">
 				<tbody>
 					<tr>
-						<c:if test="${sessionScope.username != null}">
+						<c:if test="${sessionScope.user != null}">
 
 							<td class="row1">
 								<p class="breadcrumbs">
 									Connect&eacute; en tant que
-									<%=session.getAttribute("username")%>!
+									<%=session.getAttribute("user")%>
+									!
 								</p>
 							</td>
 							<td class="row1"><a href="logout" class="breadcrumbs">D&eacute;connexion</a>
@@ -35,34 +36,41 @@
 
 						</c:if>
 
-						<c:if
-								test="${sessionScope.username == null}">
+						<c:if test="${sessionScope.user == null}">
 
-								<td class="row1">
-									<p class="breadcrumbs">Non connect&eacute;</p>
-								</td>
-								<td class="row1">
-									<p class="breadcrumbs">
-										<a href="login" class="breadcrumbs">Se connecter</a>
-									</p>
-								</td>
+							<td class="row1">
+								<p class="breadcrumbs">Non connect&eacute;</p>
+							</td>
+							<td class="row1">
+								<p class="breadcrumbs">
+									<a href="login" class="breadcrumbs">Se connecter</a>
+								</p>
+							</td>
+							<td class="row1">
+								<p class="breadcrumbs">
+									Vous n'avez pas de compte ? <a href="signup"
+										class="breadcrumbs">Sign Up ! </a>
+								</p>
+							</td>
 
-							</c:if>
+						</c:if>
 					</tr>
 				</tbody>
 			</table>
 
 			<br clear="all" />
 
-			<table cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<td valign="middle" align="left"><img
-							src="fichiers/button_topic_new.gif" alt="Post new topic"
-							title="Post new topic" /></td>
-					</tr>
-				</tbody>
-			</table>
+			<c:if test="${sessionScope.user != null}">
+				<table cellspacing="1" width="100%">
+					<tbody>
+						<tr>
+							<td valign="middle" align="left"><a href="topic"
+								class="breadcrumbs"><img src="fichiers/button_topic_new.gif"
+									alt="Post new topic" title="Post new topic" /></a></td>
+						</tr>
+					</tbody>
+				</table>
+			</c:if>
 
 			<br clear="all" />
 
@@ -90,59 +98,25 @@
 					</tr>
 
 
-
-					<tr>
-						<td class="row1"><a class="topictitle" href="#">Mon fil
-								de discussion</a></td>
-						<td class="row2" align="center" width="130"><p
-								class="topicauthor">
-								<a class="username-coloured" href="#">Yves</a>
-							</p></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">10</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
-					</tr>
-
-					<tr>
-						<td class="row1"><a class="topictitle" href="#">Mon fil
-								de discussion</a></td>
-						<td class="row2" align="center" width="130"><p
-								class="topicauthor">
-								<a class="username-coloured" href="#">Yves</a>
-							</p></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">10</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
-					</tr>
-
-					<tr>
-						<td class="row1"><a class="topictitle" href="#">Mon fil
-								de discussion</a></td>
-						<td class="row2" align="center" width="130"><p
-								class="topicauthor">
-								<a class="username-coloured" href="#">Yves</a>
-							</p></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">10</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
-					</tr>
-
-					<tr>
-						<td class="row1"><a class="topictitle" href="#">Mon fil
-								de discussion</a></td>
-						<td class="row2" align="center" width="130"><p
-								class="topicauthor">
-								<a class="username-coloured" href="#">Yves</a>
-							</p></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">10</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
-					</tr>
-
+					<c:forEach items="${threads}" var="thread">
+						<tr>
+							<c:set var="URL">
+								<c:url value="thread.jsp">
+									<c:param name="title" value="${thread.title}" />
+									<c:param name="author" value="${thread.author}" />
+								</c:url>
+							</c:set>
+							<td class="row1"><a class="topictitle" href="${URL}">${thread.title}</a></td>
+							<td class="row2" align="center" width="130"><p
+									class="topicauthor">
+									${thread.author}
+								</p></td>
+							<td class="row1" align="center" width="50"><p
+									class="topicdetails">10</p></td>
+							<td class="row2" align="center" width="50"><p
+									class="topicdetails">1234</p></td>
+						</tr>
+					</c:forEach>
 
 				</tbody>
 			</table>

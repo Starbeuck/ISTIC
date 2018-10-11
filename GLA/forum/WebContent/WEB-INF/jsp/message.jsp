@@ -4,7 +4,7 @@
 	lang="en-gb">
 <head>
 
-<title>${param.title}</title>
+<title>POST NEW MESSAGE</title>
 
 <link rel="stylesheet" href="fichiers/style.css" type="text/css" />
 </head>
@@ -14,7 +14,6 @@
 
 		<br style="clear: both;" />
 
-		
 		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
 			cellpadding="0" width="100%">
 			<tbody>
@@ -40,12 +39,12 @@
 		</table>
 		<br />
 
-		<form action="login" method="post">
+		<form action="message.jsp" method="post">
 
 			<table class="tablebg" cellspacing="1" width="100%">
 				<tbody>
 					<tr>
-						<th colspan="2">${param.title}</th>
+						<th colspan="2">Write a new message into "${param.title}${title}"</th>
 					</tr>
 
 					<tr>
@@ -54,42 +53,29 @@
 							<table style="width: 100%;" cellspacing="1" cellpadding="4"
 								align="center">
 								<tbody>
-
-									<c:forEach items="${messages}" var="message">
-										<tr>
-											<td class="row1" align="center" width="5"><p>${message.author}</p></td>
-											<td class="row2" align="center" width="130"><p>${message.text}</p></td>
-										</tr>
-									</c:forEach>
-
+									<tr>
+										<td valign="top"><b class="gensmall">Content</b></td>
+										<td><textarea style="" class="post" name="content"
+												size="5000" tabindex="2" type="text"
+												value="<c:out value="${content}"/>"></textarea><span
+											class="erreur">${erreurs['content']}</span></td>
+									</tr>
 								</tbody>
 							</table>
 						</td>
+					</tr>
+
+					<tr>
+						<td class="cat" colspan="2" align="center"><input
+							name="newmessage" class="btnmain" value="Post Message"
+							tabindex="5" type="submit" />
+							<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p></td>
+						<span class="erreur">${erreurs['resultat']}</span>
 					</tr>
 				</tbody>
 			</table>
 
 		</form>
-
-		<c:if test="${sessionScope.user != null}">
-			<table cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<c:set var="message">
-							<c:url value="message.jsp">
-								<c:param name="title" value="${param.title}" />
-								<c:param name="author" value="${param.author}" />
-							</c:url>
-						</c:set>
-						<td valign="middle" align="right"><a href="${message}"
-							class="breadcrumbs"><img
-								src="fichiers/button_topic_reply.gif" alt="Post new message"
-								title="Post new message" /></a></td>
-					</tr>
-				</tbody>
-			</table>
-		</c:if>
-
 
 		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
 			cellpadding="0" width="100%">
