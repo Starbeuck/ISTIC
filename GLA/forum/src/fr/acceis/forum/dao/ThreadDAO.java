@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.acceis.forum.classes.FilThread;
+import fr.acceis.forum.classes.Message;
 
 public class ThreadDAO extends DAO<FilThread> {
 
@@ -16,12 +17,13 @@ public class ThreadDAO extends DAO<FilThread> {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static ArrayList<FilThread> getAllTread() throws SQLException, InstantiationException, IllegalAccessException {
+	public static ArrayList<FilThread> getAllTread()
+			throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		ArrayList<FilThread> all = new ArrayList<FilThread>();
 		PreparedStatement stmt = HSQLDBConnection.getConnection().prepareStatement("SELECT * FROM THREAD");
 		ResultSet res = stmt.executeQuery();
-		while(res.next()) {
-			FilThread tmp = new FilThread(res.getString("TITLE"),res.getString("AUTHOR"));
+		while (res.next()) {
+			FilThread tmp = new FilThread(res.getString("TITLE"), res.getString("AUTHOR"), res.getInt("NBMESSAGES"));
 			all.add(tmp);
 		}
 		return all;
@@ -40,9 +42,10 @@ public class ThreadDAO extends DAO<FilThread> {
 		// create new topic is title is free
 		if (ctr == 0) {
 			PreparedStatement newUser = this.connect
-					.prepareStatement("INSERT INTO THREAD (TITLE, AUTHOR) VALUES (?,?)");
+					.prepareStatement("INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES (?,?, ?)");
 			newUser.setString(1, obj.getTitle());
 			newUser.setString(2, obj.getAuthor());
+			newUser.setInt(3, obj.getNbMessage());
 			newUser.executeUpdate();
 			rtrn = true;
 		}

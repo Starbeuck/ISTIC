@@ -19,6 +19,9 @@ import fr.acceis.forum.dao.UserDAO;
 public class SignUpServlet extends HttpServlet {
 	public static final String CHAMP_LOGIN = "login";
 	public static final String CHAMP_PASS = "password";
+	public static final String CHAMP_AGE = "age";
+	public static final String CHAMP_GENDER = "gender";
+	public static final String CHAMP_CITY = "city";
 	public static final String ATT_ERREURS = "erreurs";
 	public static final String ATT_RESULTAT = "resultat";
 	public static final String ATT_ALREADY = "already";
@@ -31,7 +34,17 @@ public class SignUpServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String login = req.getParameter("login");
+		System.out.println(login);
 		String password = req.getParameter("password");
+		System.out.println(password);
+		String tmpAge = req.getParameter("age");
+		String gender = req.getParameter("gender");
+		System.out.println(gender);
+		System.out.println(tmpAge);
+		String city = req.getParameter("city");
+		System.out.println(city);
+		
+
 		Map<String, String> erreurs = new HashMap<String, String>();
 		String resultat = "";
 
@@ -49,16 +62,46 @@ public class SignUpServlet extends HttpServlet {
 			erreurs.put(CHAMP_PASS, e.getMessage());
 		}
 
-		// summary 
+		// not empty age or invalid age
+		try {
+			validation(tmpAge);
+		} catch (Exception e) {
+			erreurs.put(CHAMP_AGE, e.getMessage());
+		}
+
+		int age = Integer.valueOf(tmpAge);
+		
+		// not empty age or invalid age
+		try {
+			validationAge(age);
+		} catch (Exception e) {
+			erreurs.put(CHAMP_AGE, e.getMessage());
+		}
+
+		// not empty password
+		try {
+			validation(gender);
+		} catch (Exception e) {
+			erreurs.put(CHAMP_GENDER, e.getMessage());
+		}
+
+		// not empty password
+		try {
+			validation(city);
+		} catch (Exception e) {
+			erreurs.put(CHAMP_CITY, e.getMessage());
+		}
+		// summary
 		if (erreurs.isEmpty()) {
 			try {
-				//create user
-				User newUser = new User(login, password);
+				// create user
 
-				//connect to database and create user
+				User newUser = new User(login, password, age, gender, city);
+
+				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 				Boolean isCreated = DAOUser.create(newUser);
- 
+
 				// user has been created
 				if (isCreated) {
 					resultat = "Success Subscription. You can connect into login.";
@@ -82,8 +125,14 @@ public class SignUpServlet extends HttpServlet {
 	}
 
 	private void validation(String str) throws Exception {
-		if (str.isEmpty()) {
+		if (str.isEmpty() || str == null) {
 			throw new Exception("Please fill the field ! ");
+		}
+	}
+
+	private void validationAge(int str) throws Exception {
+		if (str < 18) {
+			throw new Exception("You are too young !");
 		}
 	}
 

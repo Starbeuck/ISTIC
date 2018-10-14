@@ -30,9 +30,12 @@ public class UserDAO extends DAO<User> {
 
 		// create new user if it doesnt exist
 		if (ctr == 0) {
-			PreparedStatement newUser = this.connect.prepareStatement("INSERT INTO USERS (login, password) VALUES (?,?)");
+			PreparedStatement newUser = this.connect.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD,AGE,GENDER,CITY) VALUES (?,?,?,?,?)");
 			newUser.setString(1, obj.getLogin());
 			newUser.setString(2, obj.getPassword());
+			newUser.setInt(3, obj.getAge());
+			newUser.setString(4, obj.getGender());
+			newUser.setString(5, obj.getCity());
 			newUser.executeUpdate();
 			rtrn = true;
 		}

@@ -55,17 +55,18 @@ public class LoginServlet extends HttpServlet {
 		if (erreurs.isEmpty()) {
 			try {
 				// create user
-				User newUser = new User(login, password);
+				User newUser = new User(login, password, 0, "", "");
 
 				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
+
 				User getUser = DAOUser.find(newUser);
 
 				// user has been created
-				if (getUser!= null) {
+				if (getUser != null) {
 					String log = getUser.getLogin();
 					req.getSession().setAttribute("user", log);
-					
+
 					ArrayList<FilThread> ListThread = null;
 					try {
 						ListThread = ThreadDAO.getAllTread();
@@ -85,15 +86,14 @@ public class LoginServlet extends HttpServlet {
 					erreurs.put(ATT_RESULTAT, "User doesn't exists or wrong password.");
 				}
 
-			} catch (InstantiationException | IllegalAccessException | SQLException e) {
-				
+			} catch (InstantiationException | IllegalAccessException | SQLException | ClassNotFoundException e) {
+
 			}
-		} 
+		}
 
 		// forward to request
 		req.setAttribute(ATT_ERREURS, erreurs);
 		req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
-
 	}
 
 	private void validation(String str) throws Exception {

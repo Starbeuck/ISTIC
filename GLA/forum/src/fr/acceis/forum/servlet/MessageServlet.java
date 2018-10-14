@@ -54,7 +54,7 @@ public class MessageServlet extends HttpServlet {
 			try {
 
 				// create new Thread with a new topic
-				FilThread newThread = new FilThread(title, authorTopic);
+				FilThread newThread = new FilThread(title, authorTopic,0);
 
 				// connect to database and create user
 				DAO<FilThread> DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());

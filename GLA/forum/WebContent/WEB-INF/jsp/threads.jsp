@@ -4,137 +4,112 @@
 	lang="en-gb">
 <head>
 
-<title>FORUM</title>
+<title>FORUM DE GLA</title>
 
+<!-- Bootstrap -->
+<link href="fichiers/css/bootstrap.css" rel="stylesheet" />
+<link href="fichiers/css/bootstrap-theme.css" rel="stylesheet" />
 
-
-<link rel="stylesheet" href="fichiers/style.css" type="text/css" />
+<!-- css style -->
+<link href="fichiers/css/style.css" rel="stylesheet" />
 </head>
-<body class="ltr">
+<body>
 
-
-	<div id="wrapcentre">
-
-		<div id="pagecontent">
-
-			<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
-				cellpadding="0" width="100%">
-				<tbody>
-					<tr>
-						<c:if test="${sessionScope.user != null}">
-
-							<td class="row1">
-								<p class="breadcrumbs">
-									Connect&eacute; en tant que
-									<%=session.getAttribute("user")%>
-									!
-								</p>
-							</td>
-							<td class="row1"><a href="logout" class="breadcrumbs">D&eacute;connexion</a>
-
-							</td>
-
-						</c:if>
-
-						<c:if test="${sessionScope.user == null}">
-
-							<td class="row1">
-								<p class="breadcrumbs">Non connect&eacute;</p>
-							</td>
-							<td class="row1">
-								<p class="breadcrumbs">
-									<a href="login" class="breadcrumbs">Se connecter</a>
-								</p>
-							</td>
-							<td class="row1">
-								<p class="breadcrumbs">
-									Vous n'avez pas de compte ? <a href="signup"
-										class="breadcrumbs">Sign Up ! </a>
-								</p>
-							</td>
-
-						</c:if>
-					</tr>
-				</tbody>
-			</table>
-
-			<br clear="all" />
-
-			<c:if test="${sessionScope.user != null}">
-				<table cellspacing="1" width="100%">
-					<tbody>
-						<tr>
-							<td valign="middle" align="left"><a href="topic"
-								class="breadcrumbs"><img src="fichiers/button_topic_new.gif"
-									alt="Post new topic" title="Post new topic" /></a></td>
-						</tr>
-					</tbody>
-				</table>
-			</c:if>
-
-			<br clear="all" />
-
-			<table class="tablebg" cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<td class="cat" colspan="4">
-							<table cellspacing="0" width="100%">
-								<tbody>
-									<tr class="nav">
-										<td valign="middle">&nbsp;</td>
-										<td valign="middle" align="right">&nbsp;</td>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-					</tr>
-
-					<tr>
-
-						<th>&nbsp;Topics&nbsp;</th>
-						<th>&nbsp;Auteur&nbsp;</th>
-						<th>&nbsp;R&eacute;ponses&nbsp;</th>
-						<th>&nbsp;Vues&nbsp;</th>
-					</tr>
-
-
-					<c:forEach items="${threads}" var="thread">
-						<tr>
-							<c:set var="URL">
-								<c:url value="thread.jsp">
-									<c:param name="title" value="${thread.title}" />
-									<c:param name="author" value="${thread.author}" />
-								</c:url>
-							</c:set>
-							<td class="row1"><a class="topictitle" href="${URL}">${thread.title}</a></td>
-							<td class="row2" align="center" width="130"><p
-									class="topicauthor">
-									${thread.author}
-								</p></td>
-							<td class="row1" align="center" width="50"><p
-									class="topicdetails">10</p></td>
-							<td class="row2" align="center" width="50"><p
-									class="topicdetails">1234</p></td>
-						</tr>
-					</c:forEach>
-
-				</tbody>
-			</table>
-			<br clear="all" />
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="home">Forum de GLA</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<c:if test="${sessionScope.user != null}">
+						<li><a href="logout"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
+								! D&eacute;connexion
+						</a></li>
+					</c:if>
+					<c:if test="${sessionScope.user == null}">
+						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>
+						<li><a href="signup"> Vous n'avez pas de compte ? Sign Up
+								! </a></li>
+					</c:if>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
 		</div>
+	</div>
 
-		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
-			cellpadding="0" width="100%">
-			<tbody>
+	<div class="container" style="padding-top: 7%;">
+		<c:if test="${sessionScope.user != null}">
+			<a class="btn btn-primary" href="topic" role="button">New topic !</a>
+		</c:if>
+
+		<table class="table table-striped">
+			<thead>
 				<tr>
-					<td class="row1">
-						<p class="breadcrumbs">Index du forum</p>
-					</td>
+					<th align="center">&nbsp;Topics&nbsp;</th>
+					<th align="center">&nbsp;Auteur&nbsp;</th>
+					<th align="center">&nbsp;R&eacute;ponses&nbsp;</th>
+					<th align="center">&nbsp;Vues&nbsp;</th>
 				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${threads}" var="thread">
+					<tr scope="row">
+						<c:set var="URL">
+							<c:url value="thread.jsp">
+								<c:param name="title" value="${thread.title}" />
+								<c:param name="author" value="${thread.author}" />
+							</c:url>
+						</c:set>
+						<c:set var="profil">
+							<c:url value="profil.jsp">
+								<c:param name="author" value="${thread.author}" />
+							</c:url>
+						</c:set>
+						<td class="row1"><a class="topictitle" href="${URL}">${thread.title}</a></td>
+						<td class="row2" align="center" width="130"><c:if
+								test="${sessionScope.user != null}">
+								<a class="topictitle" href="${profil}">${thread.author}</a>
+							</c:if> <c:if test="${sessionScope.user == null}">
+								<p class="topicauthor">${thread.author}</p>
+							</c:if></td>
+						<td class="row1" align="center" width="50"><p
+								class="topicdetails">${thread.nbMessage}</p></td>
+						<td class="row2" align="center" width="50"><p
+								class="topicdetails">1234</p></td>
+					</tr>
+				</c:forEach>
+
 			</tbody>
 		</table>
 
+		<!--  footer -->
+		<div id="footer">
+			<div class="container ">
+				<div class="row">
+					<div class="col-sm-6">
+						<p class="copyright">Made by Solenn KEROULLAS</p>
+					</div>
+					<div class="col-sm-6">
+						<div class="credits">
+							Designed by <a
+								href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
+								Repository</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
 </body>
+
 </html>

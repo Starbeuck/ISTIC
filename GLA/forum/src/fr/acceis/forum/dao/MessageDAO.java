@@ -16,7 +16,7 @@ public class MessageDAO extends DAO<Message> {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static ArrayList<Message> getAllMessage(int id) throws SQLException, InstantiationException, IllegalAccessException {
+	public static ArrayList<Message> getAllMessage(int id) throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		ArrayList<Message> all = new ArrayList<Message>();
 		PreparedStatement stmt = HSQLDBConnection.getConnection().prepareStatement("SELECT * FROM MESSAGE WHERE IDTHREAD = ?");
 		stmt.setInt(1, id);
@@ -36,6 +36,11 @@ public class MessageDAO extends DAO<Message> {
 		newMessage.setString(2, obj.getText());
 		newMessage.setInt(3, obj.getIdThread());
 		newMessage.executeUpdate();
+		
+		PreparedStatement IncrThread = this.connect.prepareStatement("UPDATE THREAD SET NBMESSAGES = NBMESSAGES+1 WHERE ID = ?");
+		IncrThread.setInt(1, obj.getIdThread());
+		IncrThread.executeUpdate();
+		
 		rtrn = true;
 		return rtrn;
 	}

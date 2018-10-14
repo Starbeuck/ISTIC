@@ -6,83 +6,91 @@
 
 <title>LOGIN</title>
 
-<link rel="stylesheet" href="fichiers/style.css" type="text/css" />
+<!-- Bootstrap -->
+<link href="fichiers/css/bootstrap.css" rel="stylesheet" />
+<link href="fichiers/css/bootstrap-theme.css" rel="stylesheet" />
+
+<!-- css style -->
+<link href="fichiers/css/style.css" rel="stylesheet" />
 </head>
-<body class="ltr">
+<body>
 
-	<div id="wrapcentre">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="home">Forum de GLA</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<c:if test="${sessionScope.user != null}">
+						<li><a href="logout"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
+								! D&eacute;connexion
+						</a></li>
+					</c:if>
+					<c:if test="${sessionScope.user == null}">
+						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>
+						<li><a href="signup"> Vous n'avez pas de compte ? Sign Up
+								! </a></li>
+					</c:if>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+	<div class="container" style="padding-top: 7%;">
 
-		<br style="clear: both;" />
+		<form action="login" method="post" class="form-signin">
+			<div class="text-center mb-4">
+				<img class="mb-4" src="fichiers/imgs/pikachu.png" alt="" width="72"
+					height="72" />
+				<h1 class="h3 mb-3 font-weight-normal">Log in !</h1>
 
-		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
-			cellpadding="0" width="100%">
-			<tbody>
-				<tr>
-					<td class="row1">
-						<p class="breadcrumbs">
-							<a href="home">Board index</a>
-						</p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<br />
 
-		<form action="login" method="post">
+				<div class="form-label-group">
+					<label for="inputEmail">Your username</label> <input
+						class="form-control" placeholder="Username" required autofocus
+						name="username" /> <span class="erreur">${erreurs['login']}</span>
+				</div>
 
-			<table class="tablebg" cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<th colspan="2">Login</th>
-					</tr>
+				<div class="form-label-group">
+					<label for="inputPassword">Password</label> <input type="password"
+						class="form-control" placeholder="Password" name="password"
+						required /><span class="erreur">${erreurs['password']}</span>
+				</div>
 
-					<tr>
-						<td class="row2">
-
-							<table style="width: 100%;" cellspacing="1" cellpadding="4"
-								align="center">
-								<tbody>
-									<tr>
-										<td valign="top"><b class="gensmall">Login :</b></td>
-										<td><input class="post" name="username" size="25"
-											tabindex="1" type="text"></input></td>
-										<span class="erreur">${erreurs['login']}</span>
-
-									</tr>
-									<tr>
-										<td valign="top"><b class="gensmall">Mot de passe:</b></td>
-										<td><input class="post" name="password" size="25"
-											tabindex="2" type="password"></input></td>
-										<span class="erreur">${erreurs['password']}</span>
-
-									</tr>
-
-								</tbody>
-							</table>
-						</td>
-					</tr>
-
-					<tr>
-						<td class="cat" colspan="2" align="center"><input
-							name="login" class="btnmain" value="Login" tabindex="5"
-							type="submit" /></td>
-						<span class="erreur">${erreurs['resultat']}</span>
-					</tr>
-				</tbody>
-			</table>
-
+				<input class="btn btn-theme" name="login" class="btnmain"
+					value="Login" type="submit" style="margin-top:5%"/> <span class="erreur">${erreurs['resultat']}</span>
+			</div>
 		</form>
 
-		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
-			cellpadding="0" width="100%">
-			<tbody>
-				<tr>
-					<td class="row1">
-						<p class="breadcrumbs">Index du forum</p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<!-- footer -->
+		<div id="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6">
+						<p class="copyright">Made by Solenn KEROULLAS</p>
+					</div>
+					<div class="col-sm-6">
+						<div class="credits">
+							Designed by <a
+								href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
+								Repository</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+
 	</div>
 </body>
 </html>

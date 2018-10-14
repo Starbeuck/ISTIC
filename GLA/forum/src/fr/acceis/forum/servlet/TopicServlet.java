@@ -59,7 +59,7 @@ public class TopicServlet extends HttpServlet {
 			try {
 
 				// create new Thread with a new topic
-				FilThread newThread = new FilThread(title, author);
+				FilThread newThread = new FilThread(title, author, 0);
 
 				// connect to database and create user
 				DAO<FilThread> DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());

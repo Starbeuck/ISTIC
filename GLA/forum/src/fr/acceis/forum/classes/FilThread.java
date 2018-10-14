@@ -1,19 +1,23 @@
 package fr.acceis.forum.classes;
 
-import java.util.List;
 import java.util.ArrayList;
 
 public class FilThread {
 	private String title;
-	private String author;
-	private List<Message> listMessage = new ArrayList<Message>();	
+	private String author;	
+	private int nbMessage;
 	
+	public FilThread(String tit, String aut, int nbMess) {
+		this.title = tit;
+		this.author = aut;
+		this.nbMessage = nbMess;
+	}
+
 	public FilThread(String tit, String aut) {
 		this.title = tit;
 		this.author = aut;
-		this.listMessage = new ArrayList<Message>();
 	}
-
+	
 	public String getTitle() {
 		return title;
 	}
@@ -30,11 +34,12 @@ public class FilThread {
 		this.author = author;
 	}
 
-	public List<Message> getListMessage() {
-		return listMessage;
+	public int getNbMessage() {
+		return nbMessage;
 	}
 
-	public void setListMessage(List<Message> listMessage) {
-		this.listMessage = listMessage;
+	public void setNbMessage(int nbMessage) {
+		this.nbMessage = nbMessage;
 	}
+
 }

@@ -6,101 +6,97 @@
 
 <title>${param.title}</title>
 
-<link rel="stylesheet" href="fichiers/style.css" type="text/css" />
+<!-- Bootstrap -->
+<link href="fichiers/css/bootstrap.css" rel="stylesheet" />
+<link href="fichiers/css/bootstrap-theme.css" rel="stylesheet" />
+
+<!-- css style -->
+<link href="fichiers/css/style.css" rel="stylesheet" />
 </head>
-<body class="ltr">
+<body>
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="home">Forum de GLA</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<c:if test="${sessionScope.user != null}">
+						<li><a href="logout"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
+								! D&eacute;connexion
+						</a></li>
+					</c:if>
+					<c:if test="${sessionScope.user == null}">
+						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>
+						<li><a href="signup"> Vous n'avez pas de compte ? Sign Up
+								! </a></li>
+					</c:if>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+	<div class="container" style="padding-top: 7%;">
 
-	<div id="wrapcentre">
+		<div class="py-5  text-center">
+			<h2>${param.title}</h2>
+		</div>
+		<table class="table table-striped">
+			<thead class="text-center">
+				<tr>
+					<th align="center">Author</th>
+					<th align="center">Message</th>
+				</tr>
+			</thead>
 
-		<br style="clear: both;" />
-
-		
-		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
-			cellpadding="0" width="100%">
 			<tbody>
-				<tr>
-
-					<td class="row1">
-						<p class="breadcrumbs">
-							Connect&eacute; en tant que
-							<%=session.getAttribute("user")%>
-							!
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<td class="row1">
-						<p class="breadcrumbs">
-							<a href="home">Board index</a>
-						</p>
-					</td>
-				</tr>
-
+				<c:forEach items="${messages}" var="message">
+					<tr>
+						<td class="row1" align="center" width="5"><p>${message.author}</p></td>
+						<td class="row2" align="center" width="130"><p>${message.text}</p></td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
-		<br />
 
-		<form action="login" method="post">
-
-			<table class="tablebg" cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<th colspan="2">${param.title}</th>
-					</tr>
-
-					<tr>
-						<td class="row2">
-
-							<table style="width: 100%;" cellspacing="1" cellpadding="4"
-								align="center">
-								<tbody>
-
-									<c:forEach items="${messages}" var="message">
-										<tr>
-											<td class="row1" align="center" width="5"><p>${message.author}</p></td>
-											<td class="row2" align="center" width="130"><p>${message.text}</p></td>
-										</tr>
-									</c:forEach>
-
-								</tbody>
-							</table>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-
-		</form>
 
 		<c:if test="${sessionScope.user != null}">
-			<table cellspacing="1" width="100%">
-				<tbody>
-					<tr>
-						<c:set var="message">
-							<c:url value="message.jsp">
-								<c:param name="title" value="${param.title}" />
-								<c:param name="author" value="${param.author}" />
-							</c:url>
-						</c:set>
-						<td valign="middle" align="right"><a href="${message}"
-							class="breadcrumbs"><img
-								src="fichiers/button_topic_reply.gif" alt="Post new message"
-								title="Post new message" /></a></td>
-					</tr>
-				</tbody>
-			</table>
+			<c:set var="message">
+				<c:url value="message.jsp">
+					<c:param name="title" value="${param.title}" />
+					<c:param name="author" value="${param.author}" />
+				</c:url>
+			</c:set>
+			<a class="btn btn-primary" href="${message}" role="button">New
+				message !</a>
 		</c:if>
 
-
-		<table class="tablebg" style="margin-top: 5px;" cellspacing="1"
-			cellpadding="0" width="100%">
-			<tbody>
-				<tr>
-					<td class="row1">
-						<p class="breadcrumbs">Index du forum</p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<!--  footer -->
+		<div id="footer">
+			<div class="container ">
+				<div class="row">
+					<div class="col-sm-6">
+						<p class="copyright">Made by Solenn KEROULLAS</p>
+					</div>
+					<div class="col-sm-6">
+						<div class="credits">
+							Designed by <a
+								href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
+								Repository</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
 </body>
 </html>

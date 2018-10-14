@@ -4,7 +4,8 @@
 	lang="en-gb">
 <head>
 
-<title>TOPIC</title>
+<title>Profil de ${param.author}</title>
+
 
 <!-- Bootstrap -->
 <link href="fichiers/css/bootstrap.css" rel="stylesheet" />
@@ -43,51 +44,29 @@
 			<!--/.nav-collapse -->
 		</div>
 	</div>
+
 	<div class="container" style="padding-top: 7%;">
-		<form action="topic" method="post">
+		<div class="py-5  text-center">
+			<h2>Profil de ${param.author}</h2>
+		</div>
 
-
-			<div class="py-5  text-center">
-				<h2>Write a new topic</h2>
-			</div>
+	<!--  footer -->
+	<div id="footer">
+		<div class="container ">
 			<div class="row">
-				<div class="col-md-12">
-					<div class="form-group">
-						<label>Title of topic *</label>
-						<input name="title" size="25" class="form-control"
-							placeholder="Title for the topic*" type="text" tabindex="1"
-							required value="<c:out value="${param.title}"/>"></input>
-						<label>Content of topic *</label>
-						<textarea name="content" size="5000" class="form-control"
-							placeholder="Message for the topic*" rows="4" tabindex="2"
-							required value="<c:out value="${param.content}"/>"></textarea>
-					</div>
+				<div class="col-sm-6">
+					<p class="copyright">Made by Solenn KEROULLAS</p>
 				</div>
-				<div class="col-md-12 text-center">
-					<span class="erreur">${erreurs['content']}</span><input
-						type="submit" class="btn btn-success btn-send" value="Post Topic" />
-					<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
-					<span class="erreur">${erreurs['resultat']}</span>
-				</div>
-			</div>
-		</form>
-		<!--  footer -->
-		<div id="footer">
-			<div class="container ">
-				<div class="row">
-					<div class="col-sm-6">
-						<p class="copyright">Made by Solenn KEROULLAS</p>
-					</div>
-					<div class="col-sm-6">
-						<div class="credits">
-							Designed by <a
-								href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
-								Repository</a>
-						</div>
+				<div class="col-sm-6">
+					<div class="credits">
+						Designed by <a
+							href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
+							Repository</a>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
