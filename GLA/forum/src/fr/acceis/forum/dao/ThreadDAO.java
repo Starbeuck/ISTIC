@@ -82,4 +82,10 @@ public class ThreadDAO extends DAO<FilThread> {
 
 		return id;
 	}
+
+	@Override
+	public FilThread findByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

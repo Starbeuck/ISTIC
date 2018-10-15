@@ -79,7 +79,7 @@
 
 		<!--  footer -->
 		<div id="footer">
-			<div class="container ">
+			<div class="inner">
 				<div class="row">
 					<div class="col-sm-6">
 						<p class="copyright">Made by Solenn KEROULLAS</p>
@@ -94,6 +94,7 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

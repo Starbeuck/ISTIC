@@ -50,23 +50,41 @@
 			<h2>Profil de ${param.author}</h2>
 		</div>
 
-	<!--  footer -->
-	<div id="footer">
-		<div class="container ">
-			<div class="row">
-				<div class="col-sm-6">
-					<p class="copyright">Made by Solenn KEROULLAS</p>
-				</div>
-				<div class="col-sm-6">
-					<div class="credits">
-						Designed by <a
-							href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
-							Repository</a>
+		<div class="row justify-content-between">
+			<div class="col-sm-5 py-5  text-center">
+				<img class="mb-4" src="<c:url value="${photo}"/>" alt="Icon" />
+				<p>Gender : ${getUser.gender }</p>
+			</div>
+			<div class="col-sm-7">
+				<p>Age : ${getUser.age }</p>
+				<p>Habite à : ${getUser.city }</p>
+				<p>Nombres de messages postés: ${nbMess}</p>
+				<p>
+					Rank : ${rank.ranked} <img class="mb-4"
+						src="<c:url value="${rank.URLBadge}" />" alt="Icon ${rank.ranked}" />
+				</p>
+			</div>
+		</div>
+
+
+
+		<!--  footer -->
+		<div id="footer">
+			<div class="container ">
+				<div class="row">
+					<div class="col-sm-6">
+						<p class="copyright">Made by Solenn KEROULLAS</p>
+					</div>
+					<div class="col-sm-6">
+						<div class="credits">
+							Designed by <a
+								href="https://github.com/Starbeuck/ISTIC/tree/master/GLA">Github
+								Repository</a>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

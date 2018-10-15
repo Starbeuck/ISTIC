@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Message;
 import fr.acceis.forum.classes.User;
 
@@ -14,7 +15,6 @@ public class UserDAO extends DAO<User> {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
-
 
 	@Override
 	public boolean create(User obj) throws InstantiationException, IllegalAccessException, SQLException {
@@ -30,7 +30,8 @@ public class UserDAO extends DAO<User> {
 
 		// create new user if it doesnt exist
 		if (ctr == 0) {
-			PreparedStatement newUser = this.connect.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD,AGE,GENDER,CITY) VALUES (?,?,?,?,?)");
+			PreparedStatement newUser = this.connect
+					.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD,AGE,GENDER,CITY) VALUES (?,?,?,?,?)");
 			newUser.setString(1, obj.getLogin());
 			newUser.setString(2, obj.getPassword());
 			newUser.setInt(3, obj.getAge());
@@ -46,15 +47,31 @@ public class UserDAO extends DAO<User> {
 
 	@Override
 	public User find(User obj) throws SQLException, InstantiationException, IllegalAccessException {
-		PreparedStatement stmt = this.connect.prepareStatement("SELECT LOGIN FROM USERS WHERE LOGIN = ? AND PASSWORD = ?");
+		PreparedStatement stmt = this.connect
+				.prepareStatement("SELECT LOGIN FROM USERS WHERE LOGIN = ? AND PASSWORD = ?");
 		stmt.setString(1, obj.getLogin());
 		stmt.setString(2, obj.getPassword());
 		ResultSet res = stmt.executeQuery();
-		
+
 		if (!res.next()) {
 			return null;
 		}
 		return obj;
+	}
+
+	@Override
+	public User findByName(String name) throws SQLException, InstantiationException, IllegalAccessException {
+		PreparedStatement stmt = this.connect.prepareStatement("SELECT * FROM USERS WHERE LOGIN = ?");
+		stmt.setString(1, name);
+		ResultSet res = stmt.executeQuery();
+
+		if (!res.next()) {
+			return null;
+		}
+
+		User user = new User(res.getString("LOGIN"), "", res.getInt("AGE"), res.getString("GENDER"),
+				res.getString("CITY"));
+		return user;
 	}
 
 	@Override
@@ -68,7 +85,6 @@ public class UserDAO extends DAO<User> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 
 	@Override
 	public int findbyID(User obj) throws SQLException, InstantiationException, IllegalAccessException {

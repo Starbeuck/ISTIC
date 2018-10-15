@@ -171,8 +171,8 @@ h2.subtitle {
 /* footer */
 #footer {
 	background: #32CD32;
+	margin-top : 20px;	
 	padding: 20px 0 5px;
-	position: absolute;
 	bottom: 0;
 }
 

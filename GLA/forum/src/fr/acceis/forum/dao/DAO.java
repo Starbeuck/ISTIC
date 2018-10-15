@@ -46,4 +46,6 @@ public abstract class DAO<T> {
   public abstract T find(T obj) throws SQLException, InstantiationException, IllegalAccessException;
   
   public abstract int findbyID(T obj) throws SQLException, InstantiationException, IllegalAccessException;
+  
+  public abstract T findByName(String name) throws SQLException, InstantiationException, IllegalAccessException; 
 }

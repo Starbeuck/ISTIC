@@ -60,7 +60,7 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${threads}" var="thread">
-					<tr scope="row">
+					<tr>
 						<c:set var="URL">
 							<c:url value="thread.jsp">
 								<c:param name="title" value="${thread.title}" />
@@ -72,12 +72,12 @@
 								<c:param name="author" value="${thread.author}" />
 							</c:url>
 						</c:set>
-						<td class="row1"><a class="topictitle" href="${URL}">${thread.title}</a></td>
-						<td class="row2" align="center" width="130"><c:if
+						<td><a href="${URL}">${thread.title}</a></td>
+						<td align="center" width="130"><c:if
 								test="${sessionScope.user != null}">
-								<a class="topictitle" href="${profil}">${thread.author}</a>
+								<a href="${profil}">${thread.author}</a>
 							</c:if> <c:if test="${sessionScope.user == null}">
-								<p class="topicauthor">${thread.author}</p>
+								<p>${thread.author}</p>
 							</c:if></td>
 						<td class="row1" align="center" width="50"><p
 								class="topicdetails">${thread.nbMessage}</p></td>

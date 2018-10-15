@@ -14,7 +14,8 @@ import fr.acceis.forum.dao.HSQLDBConnection;
 
 public class JeuDeTestJdBc {
 
-	public final static String[] QUERIES_TEST = { "DROP TABLE USERS IF EXISTS", "DROP TABLE THREAD IF EXISTS", "DROP TABLE MESSAGE IF EXISTS",
+	public final static String[] QUERIES_TEST = { "DROP TABLE USERS IF EXISTS", "DROP TABLE THREAD IF EXISTS",
+			"DROP TABLE MESSAGE IF EXISTS",
 			"CREATE TABLE USERS (ID INT IDENTITY PRIMARY KEY, LOGIN VARCHAR(255), PASSWORD VARCHAR(255), AGE INT, GENDER VARCHAR(10), CITY VARCHAR(50))", // increment
 			"ALTER TABLE USERS ADD CONSTRAINT UNIQUE_LOGIN UNIQUE(login)",
 			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('admin', 'admin', '25', 'MALE', 'Paris')",
@@ -35,23 +36,20 @@ public class JeuDeTestJdBc {
 		Class.forName("org.hsqldb.jdbcDriver").newInstance();
 		Connection connexion = DriverManager
 				.getConnection("jdbc:hsqldb:/home/solenn/Documents/GLA/ForumTP/forum/data/basejpa", "sa", "");
-		Statement stmt = connexion.createStatement(); 
+		Statement stmt = connexion.createStatement();
 
 		for (String query : QUERIES_TEST) {
-			stmt.executeUpdate(query);
+			// stmt.executeUpdate(query);
 		}
 
-		Message obj = new Message("pierre", "deuxieme message", 2);
-		PreparedStatement newMessage = connexion
-				.prepareStatement("INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES (?,?,?)");
-		newMessage.setString(1, obj.getAuthor());
-		newMessage.setString(2, obj.getText());
-		newMessage.setInt(3, obj.getIdThread());
-		newMessage.executeUpdate();
-		
-		PreparedStatement IncrThread = connexion.prepareStatement("UPDATE THREAD SET NBMESSAGES = NBMESSAGES+1 WHERE ID = ?");
-		IncrThread.setInt(1, obj.getIdThread());
-		IncrThread.executeUpdate();
+		Message tmpMess = new Message("Axi", "", 0);
+		PreparedStatement test = connexion.prepareStatement("SELECT COUNT (AUTHOR) FROM MESSAGE WHERE AUTHOR = ?");
+		test.setString(1, tmpMess.getAuthor());
+		ResultSet res = test.executeQuery();
+
+		res.next();
+		int ctr = res.getInt(1);
+		System.out.println(ctr);
 		stmt.close();
 		connexion.close();
 
