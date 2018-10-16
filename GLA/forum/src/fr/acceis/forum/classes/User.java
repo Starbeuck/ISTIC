@@ -6,13 +6,15 @@ public class User {
 	private int age;
 	private String gender;
 	private String city;
+	private String photo;
 	
-	public User(String log, String pw, int a, String sex, String cit) {
+	public User(String log, String pw, int a, String sex, String cit, String photo) {
 		this.setLogin(log);
 		this.setPassword(pw);
 		this.setAge(a);
 		this.setGender(sex);
 		this.setCity(cit);
+		this.setPhoto(photo);
 	}
 	
 	public String getLogin() {
@@ -50,6 +52,14 @@ public class User {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 	
 	

@@ -66,12 +66,13 @@ public class MessageDAO extends DAO<Message> {
 
 	@Override
 	public int findbyID(Message obj) throws SQLException, InstantiationException, IllegalAccessException {
+		int ctr = 0;
 		PreparedStatement stmt = this.connect.prepareStatement("SELECT COUNT (AUTHOR) FROM MESSAGE WHERE AUTHOR = ?");
 		stmt.setString(1, obj.getAuthor());
 		ResultSet res = stmt.executeQuery();
 
 		res.next();
-		int ctr = res.getInt(1);
+		ctr = res.getInt(1);
 		
 		return ctr;
 	}

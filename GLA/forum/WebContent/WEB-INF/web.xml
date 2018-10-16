@@ -36,6 +36,10 @@
 		<servlet-name>profil</servlet-name>
 		<servlet-class>fr.acceis.forum.servlet.ProfilServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>upload</servlet-name>
+		<servlet-class>fr.acceis.forum.servlet.UploadServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>accueil</servlet-name>
 		<url-pattern>/home</url-pattern>
@@ -67,5 +71,9 @@
 	<servlet-mapping>
 		<servlet-name>profil</servlet-name>
 		<url-pattern>/profil.jsp/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>upload</servlet-name>
+		<url-pattern>/upload</url-pattern>
 	</servlet-mapping>
 </web-app>

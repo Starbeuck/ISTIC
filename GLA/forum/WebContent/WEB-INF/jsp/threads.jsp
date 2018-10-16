@@ -29,9 +29,10 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<c:if test="${sessionScope.user != null}">
-						<li><a href="logout"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
-								! D&eacute;connexion
+						<li><a href="upload"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
+								!
 						</a></li>
+						<li><a href="logout">D&eacute;connexion </a></li>
 					</c:if>
 					<c:if test="${sessionScope.user == null}">
 						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>

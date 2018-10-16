@@ -26,11 +26,10 @@ public class HSQLDBConnection {
 	static Connection con = null;
 	public static Connection getConnection()
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-
+		Class.forName("org.sqlite.JDBC");
 		if (con == null) {
-			Class.forName("org.hsqldb.jdbcDriver").newInstance();
-			con = DriverManager.getConnection("jdbc:hsqldb:/home/solenn/Documents/GLA/ForumTP/forum/data/basejpa", "SA",
-					"");
+			con = DriverManager
+					.getConnection("jdbc:sqlite:/home/solenn/Documents/GLA/ForumTP/forum/data/db/forum.db", "sa", "");
 			System.out.println("CREATE NEW CONNECTION HSQLDB");
 		} else {
 			System.out.println("USING EXISTING CONNECTION HSQLDB");

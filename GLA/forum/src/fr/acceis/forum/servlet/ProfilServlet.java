@@ -8,14 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Message;
 import fr.acceis.forum.classes.Rank;
 import fr.acceis.forum.classes.User;
 import fr.acceis.forum.dao.DAO;
 import fr.acceis.forum.dao.HSQLDBConnection;
 import fr.acceis.forum.dao.MessageDAO;
-import fr.acceis.forum.dao.ThreadDAO;
 import fr.acceis.forum.dao.UserDAO;
 
 @SuppressWarnings("serial")
@@ -42,15 +40,9 @@ public class ProfilServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		// pick a picture
-		if (getUser.getGender().equals("Male")) {
-			req.setAttribute("photo", "fichiers/imgs/SuperMan.png");
-		} else {
-			req.setAttribute("photo", "fichiers/imgs/WonderWoman.png");
-		}
+		req.setAttribute("photo", getUser.getPhoto());
 
 		// get message post by the user
-
 		Message tmpMess = new Message(getUser.getLogin(), "", 0);
 		DAO<Message> DAOMessage = null;
 		try {
@@ -62,7 +54,6 @@ public class ProfilServlet extends HttpServlet {
 		int nbMessages = 0;
 		try {
 			nbMessages = DAOMessage.findbyID(tmpMess);
-			System.out.println(nbMessages);
 		} catch (InstantiationException | IllegalAccessException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

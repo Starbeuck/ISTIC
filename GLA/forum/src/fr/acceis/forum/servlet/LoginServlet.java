@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 		if (erreurs.isEmpty()) {
 			try {
 				// create user
-				User newUser = new User(login, password, 0, "", "");
+				User newUser = new User(login, password, 0, "", "", "");
 
 				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
@@ -67,16 +67,17 @@ public class LoginServlet extends HttpServlet {
 					String log = getUser.getLogin();
 					req.getSession().setAttribute("user", log);
 
+					ThreadDAO DAOThread = null;
+					try {
+						DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
+					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					ArrayList<FilThread> ListThread = null;
 					try {
-						ListThread = ThreadDAO.getAllTread();
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SQLException e) {
+						ListThread = DAOThread.getAllTread();
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

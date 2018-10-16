@@ -32,8 +32,9 @@ public abstract class DAO<T> {
   * Méthode de mise à jour
   * @param obj
   * @return boolean
+ * @throws SQLException 
   */
-  public abstract boolean update(T obj);
+  public abstract boolean update(T obj) throws SQLException;
 
   /**
   * Méthode de recherche des informations

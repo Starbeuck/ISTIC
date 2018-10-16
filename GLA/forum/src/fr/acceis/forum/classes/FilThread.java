@@ -1,7 +1,5 @@
 package fr.acceis.forum.classes;
 
-import java.util.ArrayList;
-
 public class FilThread {
 	private String title;
 	private String author;	

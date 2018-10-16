@@ -30,7 +30,6 @@ public class MessageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		title = req.getParameter("title");
 		authorTopic = req.getParameter("author");
-		System.out.println(authorTopic);
 		req.getRequestDispatcher("/WEB-INF/jsp/message.jsp").forward(req, resp);
 	}
 

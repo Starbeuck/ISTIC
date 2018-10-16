@@ -14,14 +14,14 @@ import fr.acceis.forum.dao.HSQLDBConnection;
 
 public class JeuDeTestJdBc {
 
-	public final static String[] QUERIES_TEST = { "DROP TABLE USERS IF EXISTS", "DROP TABLE THREAD IF EXISTS",
+	public final static String[] QUERIES_TEST_HSQLDB = { "DROP TABLE USERS IF EXISTS", "DROP TABLE THREAD IF EXISTS",
 			"DROP TABLE MESSAGE IF EXISTS",
-			"CREATE TABLE USERS (ID INT IDENTITY PRIMARY KEY, LOGIN VARCHAR(255), PASSWORD VARCHAR(255), AGE INT, GENDER VARCHAR(10), CITY VARCHAR(50))", // increment
+			"CREATE TABLE USERS (ID INT IDENTITY PRIMARY KEY, LOGIN VARCHAR(255), PASSWORD VARCHAR(255), AGE INT, GENDER VARCHAR(10), CITY VARCHAR(50), PHOTO VARCHAR(100))", // increment
 			"ALTER TABLE USERS ADD CONSTRAINT UNIQUE_LOGIN UNIQUE(login)",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('admin', 'admin', '25', 'MALE', 'Paris')",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('pierre', 'pierre', '18', 'MALE', 'Rennes')",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('paul', 'paul', '16', 'MALE', 'Brest')",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('jacques', 'jacques', '55', 'MALE', 'Marseille')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('admin', 'admin', '25', 'MALE', 'Paris', 'fichiers/imgs/SuperMan.png')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('pierre', 'pierre', '18', 'MALE', 'Rennes', 'fichiers/imgs/SuperMan.png')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('paul', 'paul', '16', 'MALE', 'Brest', 'fichiers/imgs/SuperMan.png')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY) VALUES('jacques', 'jacques', '55', 'MALE', 'Marseille', 'fichiers/imgs/SuperMan.png')",
 			"CREATE TABLE THREAD (ID INT IDENTITY PRIMARY KEY, TITLE VARCHAR(255), AUTHOR VARCHAR(255), NBMESSAGES INT)",
 			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou jacques', 'jacques', '1')",
 			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou pierre', 'pierre', '1')",
@@ -32,18 +32,37 @@ public class JeuDeTestJdBc {
 			"INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES('pierre', 'hello pierrou', '1')",
 			"INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES('paul', 'hello polo', '2')", };
 
-	public static void main(String[] args) throws Exception {
-		Class.forName("org.hsqldb.jdbcDriver").newInstance();
-		Connection connexion = DriverManager
-				.getConnection("jdbc:hsqldb:/home/solenn/Documents/GLA/ForumTP/forum/data/basejpa", "sa", "");
-		Statement stmt = connexion.createStatement();
+	public final static String[] QUERIES_TEST_SQLITE = {
+			"CREATE TABLE IF NOT EXISTS USERS (ID INTEGER PRIMARY KEY, LOGIN VARCHAR(50) UNIQUE, PASSWORD VARCHAR(100), AGE INT, GENDER VARCHAR(10), CITY TEXT, PHOTO VARCHAR(100))",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('admin', 'admin', '25', 'MALE', 'Paris', 'fichiers/imgs/SuperMan.png')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('pierre', 'pierre', '18', 'MALE', 'Rennes', 'fichiers/imgs/SuperMan.png')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('paul', 'paul', '16', 'MALE', 'Brest', 'fichiers/imgs/SuperMan.png')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('jacques', 'jacques', '55', 'MALE', 'Marseille', 'fichiers/imgs/SuperMan.png')",
+			"CREATE TABLE IF NOT EXISTS THREAD (ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), AUTHOR VARCHAR(255), NBMESSAGES INT)",
+			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou jacques', 'jacques', '1')",
+			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou pierre', 'pierre', '1')",
+			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou paul', 'paul','1')",
+			"CREATE TABLE IF NOT EXISTS MESSAGE (ID INTEGER PRIMARY KEY, AUTHOR TEXT, CONTENT VARCHAR(5000), IDTHREAD INT, FOREIGN KEY (IDTHREAD) REFERENCES THREAD (ID) )",
+			"INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES('jacques', 'hello jaja', '1')",
+			"INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES('pierre', 'hello pierrou', '2')",
+			"INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES('paul', 'hello polo', '3')", 			
+	};
 
-		for (String query : QUERIES_TEST) {
-			// stmt.executeUpdate(query);
+	public static void main(String[] args) throws Exception {
+		Class.forName("org.sqlite.JDBC");
+		// Connection connexion =
+		// DriverManager.getConnection("jdbc:hsqldb:/home/solenn/Documents/GLA/ForumTP/forum/data/basejpa",
+		// "sa", "");
+		Connection con = DriverManager
+				.getConnection("jdbc:sqlite:/home/solenn/Documents/GLA/ForumTP/forum/data/db/forum.db", "sa", "");
+		Statement stmt = con.createStatement();
+
+		for (String query : QUERIES_TEST_SQLITE) {
+			stmt.executeUpdate(query);
 		}
 
 		Message tmpMess = new Message("Axi", "", 0);
-		PreparedStatement test = connexion.prepareStatement("SELECT COUNT (AUTHOR) FROM MESSAGE WHERE AUTHOR = ?");
+		PreparedStatement test = con.prepareStatement("SELECT COUNT (AUTHOR) FROM MESSAGE WHERE AUTHOR = ?");
 		test.setString(1, tmpMess.getAuthor());
 		ResultSet res = test.executeQuery();
 
@@ -51,7 +70,7 @@ public class JeuDeTestJdBc {
 		int ctr = res.getInt(1);
 		System.out.println(ctr);
 		stmt.close();
-		connexion.close();
+		con.close();
 
 	}
 

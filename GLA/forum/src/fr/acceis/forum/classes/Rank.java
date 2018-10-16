@@ -7,19 +7,19 @@ public class Rank {
 	public Rank(int nbMessages) {
 		if (nbMessages < 20) {
 			setRanked("Novice");
-			setURLBadge("fichiers/imgs/JJBinks.png");
+			setURLBadge("fichiers/imgs/Rank/JJBinks.png");
 		} else if (21 < nbMessages & nbMessages < 40) {
 			setRanked("Padawan");
-			setURLBadge("fichiers/imgs/Skywalker.png");
+			setURLBadge("fichiers/imgs/Rank/Skywalker.png");
 		} else if (41 < nbMessages & nbMessages < 60) {
 			setRanked("Chevalier Jedi");
-			setURLBadge("fichiers/imgs/Windu.png");
+			setURLBadge("fichiers/imgs/Rank/Windu.png");
 		} else if (61 < nbMessages & nbMessages < 95) {
 			setRanked("Maître Jedi");
-			setURLBadge("fichiers/imgs/Kenobi.png");
+			setURLBadge("fichiers/imgs/Rank/Kenobi.png");
 		} else {
 			setRanked("Grand Maître Jedi");
-			setURLBadge("fichiers/imgs/Yoda.png");
+			setURLBadge("fichiers/imgs/Rank/Yoda.png");
 		}
 	}
 

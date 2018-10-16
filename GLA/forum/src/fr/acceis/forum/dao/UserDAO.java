@@ -26,8 +26,6 @@ public class UserDAO extends DAO<User> {
 		res.next();
 		int ctr = res.getInt(1);
 
-		System.out.println(ctr);
-
 		// create new user if it doesnt exist
 		if (ctr == 0) {
 			PreparedStatement newUser = this.connect
@@ -70,7 +68,7 @@ public class UserDAO extends DAO<User> {
 		}
 
 		User user = new User(res.getString("LOGIN"), "", res.getInt("AGE"), res.getString("GENDER"),
-				res.getString("CITY"));
+				res.getString("CITY"), res.getString("PHOTO"));
 		return user;
 	}
 
@@ -81,9 +79,15 @@ public class UserDAO extends DAO<User> {
 	}
 
 	@Override
-	public boolean update(User obj) {
+	public boolean update(User obj) throws SQLException {
+		boolean rtrn = false;
+		PreparedStatement stmt = this.connect.prepareStatement("UPDATE USERS SET PHOTO = ? WHERE LOGIN = ? ");
+		stmt.setString(1, obj.getPhoto());
+		stmt.setString(2, obj.getLogin());
+		stmt.executeUpdate();
+		rtrn = true;
 		// TODO Auto-generated method stub
-		return false;
+		return rtrn;
 	}
 
 	@Override

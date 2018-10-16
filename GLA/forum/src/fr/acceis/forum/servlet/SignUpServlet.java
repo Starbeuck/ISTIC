@@ -43,7 +43,6 @@ public class SignUpServlet extends HttpServlet {
 		System.out.println(tmpAge);
 		String city = req.getParameter("city");
 		System.out.println(city);
-		
 
 		Map<String, String> erreurs = new HashMap<String, String>();
 		String resultat = "";
@@ -70,7 +69,7 @@ public class SignUpServlet extends HttpServlet {
 		}
 
 		int age = Integer.valueOf(tmpAge);
-		
+
 		// not empty age or invalid age
 		try {
 			validationAge(age);
@@ -95,8 +94,14 @@ public class SignUpServlet extends HttpServlet {
 		if (erreurs.isEmpty()) {
 			try {
 				// create user
-
-				User newUser = new User(login, password, age, gender, city);
+				// pick a picture
+				String photo = "";
+				if (gender.equals("Male")) {
+					photo = "fichiers/imgs/SuperMan.png";
+				} else {
+					photo = "fichiers/imgs/WonderWoman.png";
+				}
+				User newUser = new User(login, password, age, gender, city, photo);
 
 				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());

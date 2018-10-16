@@ -17,10 +17,10 @@ public class ThreadDAO extends DAO<FilThread> {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static ArrayList<FilThread> getAllTread()
+	public ArrayList<FilThread> getAllTread()
 			throws SQLException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		ArrayList<FilThread> all = new ArrayList<FilThread>();
-		PreparedStatement stmt = HSQLDBConnection.getConnection().prepareStatement("SELECT * FROM THREAD");
+		PreparedStatement stmt = this.connect.prepareStatement("SELECT * FROM THREAD");
 		ResultSet res = stmt.executeQuery();
 		while (res.next()) {
 			FilThread tmp = new FilThread(res.getString("TITLE"), res.getString("AUTHOR"), res.getInt("NBMESSAGES"));
