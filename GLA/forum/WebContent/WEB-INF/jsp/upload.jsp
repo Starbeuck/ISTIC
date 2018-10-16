@@ -75,7 +75,7 @@
 					<c:out value="Age : ${fn:escapeXml(getUser.age)}"></c:out>
 				</p>
 				<p>
-					<c:out value="Habite à : ${fn:escapeXml(getUser.city}"></c:out>
+					<c:out value="Habite à : ${fn:escapeXml(getUser.city)}"></c:out>
 				</p>
 				<p>
 					<c:out value="Nombres de messages postés: ${fn:escapeXml(nbMess)}"></c:out>
