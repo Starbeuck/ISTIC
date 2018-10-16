@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en-gb"
 	lang="en-gb">
 <head>
@@ -28,13 +29,13 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
-					<c:if test="${sessionScope.user != null}">
+					<c:if test="${fn:escapeXml(sessionScope.user != null)}">
 						<li><a href="upload"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
 								!
 						</a></li>
 						<li><a href="logout">D&eacute;connexion </a></li>
 					</c:if>
-					<c:if test="${sessionScope.user == null}">
+					<c:if test="${fn:escapeXml(sessionScope.user == null)}">
 						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>
 						<li><a href="signup"> Vous n'avez pas de compte ? Sign Up
 								! </a></li>
@@ -64,24 +65,26 @@
 					<tr>
 						<c:set var="URL">
 							<c:url value="thread.jsp">
-								<c:param name="title" value="${thread.title}" />
-								<c:param name="author" value="${thread.author}" />
+								<c:param name="title" value="${fn:escapeXml(thread.title)}" />
+								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
 							</c:url>
 						</c:set>
 						<c:set var="profil">
 							<c:url value="profil.jsp">
-								<c:param name="author" value="${thread.author}" />
+								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
 							</c:url>
 						</c:set>
-						<td><a href="${URL}">${thread.title}</a></td>
+						<td><a href="${fn:escapeXml(URL)}"><c:out
+									value="${fn:escapeXml(thread.title)}"></c:out></a></td>
 						<td align="center" width="130"><c:if
 								test="${sessionScope.user != null}">
-								<a href="${profil}">${thread.author}</a>
+								<a href="${fn:escapeXml(profil)}"><c:out
+										value="${fn:escapeXml(thread.author)}"></c:out></a>
 							</c:if> <c:if test="${sessionScope.user == null}">
-								<p>${thread.author}</p>
+								<c:out value="${fn:escapeXml(thread.author)}"></c:out>
 							</c:if></td>
 						<td class="row1" align="center" width="50"><p
-								class="topicdetails">${thread.nbMessage}</p></td>
+								class="topicdetails">${fn:escapeXml(thread.nbMessage)}</p></td>
 						<td class="row2" align="center" width="50"><p
 								class="topicdetails">1234</p></td>
 					</tr>

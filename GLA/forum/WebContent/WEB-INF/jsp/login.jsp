@@ -65,7 +65,8 @@
 				</div>
 
 				<input class="btn btn-theme" name="login" class="btnmain"
-					value="Login" type="submit" style="margin-top:5%"/> <span class="erreur">${erreurs['resultat']}</span>
+					value="Login" type="submit" style="margin-top: 5%" /> <span
+					class="erreur">${erreurs['resultat']}</span>
 			</div>
 		</form>
 

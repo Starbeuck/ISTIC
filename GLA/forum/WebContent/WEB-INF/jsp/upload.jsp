@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en-gb"
 	lang="en-gb">
 <head>
@@ -29,12 +30,13 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
-					<c:if test="${sessionScope.user != null}">
-						<li><a href="logout"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
-								! D&eacute;connexion
+					<c:if test="${fn:escapeXml(sessionScope.user != null)}">
+						<li><a href="upload"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
+								!
 						</a></li>
+						<li><a href="logout">D&eacute;connexion </a></li>
 					</c:if>
-					<c:if test="${sessionScope.user == null}">
+					<c:if test="${fn:escapeXml(sessionScope.user == null)}">
 						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>
 						<li><a href="signup"> Vous n'avez pas de compte ? Sign Up
 								! </a></li>
@@ -47,14 +49,18 @@
 
 	<div class="container" style="padding-top: 7%;">
 		<div class="py-5  text-center">
-			<h2>Profil de ${getUser.login}</h2>
+			<h2>
+				<c:out value="Profil de ${fn:escapeXml(getUser.login)}"></c:out>
+			</h2>
 		</div>
 
 		<div class="row justify-content-between">
 			<div class="col-sm-5 py-5  text-center">
 				<img class="mb-4" height="128" width="128"
-					src="<c:url value="${photo}"/>" alt="Icon" />
-				<p>Gender : ${getUser.gender }</p>
+					src="<c:url value="${fn:escapeXml(photo)}"/>" alt="Icon" />
+				<p>
+					<c:out value="Gender : ${fn:escapeXml(getUser.gender)}"></c:out>
+				</p>
 				<form action="upload" method="post" enctype="multipart/form-data">
 					<input type="file" name="uploadPhoto" accept=".jpg, .jpeg, .png" />
 					<input type="submit" class="btn btn-success btn-send"
@@ -65,12 +71,20 @@
 
 			</div>
 			<div class="col-sm-7">
-				<p>Age : ${getUser.age }</p>
-				<p>Habite à : ${getUser.city }</p>
-				<p>Nombres de messages postés: ${nbMess}</p>
 				<p>
-					Rank : ${rank.ranked} <img class="mb-4"
-						src="<c:url value="${rank.URLBadge}" />" alt="Icon ${rank.ranked}" />
+					<c:out value="Age : ${fn:escapeXml(getUser.age)}"></c:out>
+				</p>
+				<p>
+					<c:out value="Habite à : ${fn:escapeXml(getUser.city}"></c:out>
+				</p>
+				<p>
+					<c:out value="Nombres de messages postés: ${fn:escapeXml(nbMess)}"></c:out>
+				</p>
+				<p>
+					<c:out value="Rank : ${rank.ranked} "></c:out>
+					<img class="mb-4"
+						src="<c:url value="${fn:escapeXml(rank.URLBadge)}" />"
+						alt="Icon ${fn:escapeXml(rank.ranked)}" />
 				</p>
 			</div>
 		</div>
