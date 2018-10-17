@@ -110,8 +110,8 @@ public class UploadServlet extends HttpServlet {
 
 		try {
 			// Parse the request
-			List<?> items = upload.parseRequest(req);
-			Iterator<?> iter = items.iterator();
+			List<FileItem> items = upload.parseRequest(req);
+			Iterator<FileItem> iter = items.iterator();
 			while (iter.hasNext()) {
 				FileItem item = (FileItem) iter.next();
 

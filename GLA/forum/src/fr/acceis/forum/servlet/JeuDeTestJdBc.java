@@ -33,11 +33,11 @@ public class JeuDeTestJdBc {
 			"INSERT INTO MESSAGE (AUTHOR, CONTENT, IDTHREAD) VALUES('paul', 'hello polo', '2')", };
 
 	public final static String[] QUERIES_TEST_SQLITE = {
-			"CREATE TABLE IF NOT EXISTS USERS (ID INTEGER PRIMARY KEY, LOGIN VARCHAR(50) UNIQUE, PASSWORD VARCHAR(100), AGE INT, GENDER VARCHAR(10), CITY TEXT, PHOTO VARCHAR(100))",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('admin', 'admin', '25', 'MALE', 'Paris', 'fichiers/imgs/SuperMan.png')",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('pierre', 'pierre', '18', 'MALE', 'Rennes', 'fichiers/imgs/SuperMan.png')",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('paul', 'paul', '16', 'MALE', 'Brest', 'fichiers/imgs/SuperMan.png')",
-			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO) VALUES('jacques', 'jacques', '55', 'MALE', 'Marseille', 'fichiers/imgs/SuperMan.png')",
+			"CREATE TABLE IF NOT EXISTS USERS (ID INTEGER PRIMARY KEY, LOGIN VARCHAR(50) UNIQUE, PASSWORD VARCHAR(100), AGE INT, GENDER VARCHAR(10), CITY TEXT, PHOTO VARCHAR(100), ROLE VARCHAR(20))",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO, ROLE) VALUES('admin', 'admin', '25', 'MALE', 'Paris', 'fichiers/imgs/SuperMan.png', 'admin')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO, ROLE) VALUES('pierre', 'pierre', '18', 'MALE', 'Rennes', 'fichiers/imgs/SuperMan.png', 'user')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO, ROLE) VALUES('paul', 'paul', '16', 'MALE', 'Brest', 'fichiers/imgs/SuperMan.png', 'user')",
+			"INSERT INTO USERS (LOGIN,PASSWORD,AGE,GENDER,CITY, PHOTO, ROLE) VALUES('jacques', 'jacques', '55', 'MALE', 'Marseille', 'fichiers/imgs/SuperMan.png', 'user')",
 			"CREATE TABLE IF NOT EXISTS THREAD (ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), AUTHOR VARCHAR(255), NBMESSAGES INT)",
 			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou jacques', 'jacques', '1')",
 			"INSERT INTO THREAD (TITLE, AUTHOR, NBMESSAGES) VALUES('coucou pierre', 'pierre', '1')",
@@ -58,17 +58,10 @@ public class JeuDeTestJdBc {
 		Statement stmt = con.createStatement();
 
 		for (String query : QUERIES_TEST_SQLITE) {
+			System.out.println(query);
 			stmt.executeUpdate(query);
 		}
 
-		Message tmpMess = new Message("Axi", "", 0);
-		PreparedStatement test = con.prepareStatement("SELECT COUNT (AUTHOR) FROM MESSAGE WHERE AUTHOR = ?");
-		test.setString(1, tmpMess.getAuthor());
-		ResultSet res = test.executeQuery();
-
-		res.next();
-		int ctr = res.getInt(1);
-		System.out.println(ctr);
 		stmt.close();
 		con.close();
 

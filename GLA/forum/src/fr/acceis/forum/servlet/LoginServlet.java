@@ -66,7 +66,8 @@ public class LoginServlet extends HttpServlet {
 				if (getUser != null) {
 					String log = getUser.getLogin();
 					req.getSession().setAttribute("user", log);
-
+					req.getSession().setAttribute("role", getUser.getRole());
+					
 					ThreadDAO DAOThread = null;
 					try {
 						DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());

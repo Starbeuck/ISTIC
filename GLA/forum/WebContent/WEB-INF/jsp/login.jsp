@@ -51,7 +51,6 @@
 					height="72" />
 				<h1 class="h3 mb-3 font-weight-normal">Log in !</h1>
 
-
 				<div class="form-label-group">
 					<label for="inputEmail">Your username</label> <input
 						class="form-control" placeholder="Username" required autofocus

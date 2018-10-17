@@ -4,6 +4,18 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
 	<display-name>Forum</display-name>
+	<filter>
+		<filter-name>SessionCheckFilter</filter-name>
+		<filter-class>fr.acceis.forum.Filter.SessionCheckFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionCheckFilter</filter-name>
+		<url-pattern>/login</url-pattern>
+		<url-pattern>/message</url-pattern>
+		<url-pattern>/profil.jsp/*</url-pattern>
+		<url-pattern>/upload</url-pattern>
+		<url-pattern>/remove</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>accueil</servlet-name>
 		<servlet-class>fr.acceis.forum.servlet.AccueilServlet</servlet-class>
@@ -40,6 +52,10 @@
 		<servlet-name>upload</servlet-name>
 		<servlet-class>fr.acceis.forum.servlet.UploadServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>error401</servlet-name>
+		<servlet-class>fr.acceis.forum.servlet.Error401Servlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>accueil</servlet-name>
 		<url-pattern>/home</url-pattern>
@@ -75,5 +91,9 @@
 	<servlet-mapping>
 		<servlet-name>upload</servlet-name>
 		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>error401</servlet-name>
+		<url-pattern>/error401</url-pattern>
 	</servlet-mapping>
 </web-app>

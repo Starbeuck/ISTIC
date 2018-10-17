@@ -65,7 +65,7 @@
 				<p><c:out value="Age : ${fn:escapeXml(getUser.age)}"></c:out></p>
 				<p><c:out value="Habite à : ${fn:escapeXml(getUser.city)}"></c:out></p>
 				<p><c:out value="Nombres de messages postés: ${fn:escapeXml(nbMess)}"></c:out></p>
-				<p><c:out value="Rank : ${rank.ranked} "></c:out>
+				<p><c:out value="Rank : ${fn:escapeXml(rank.ranked)} "></c:out>
 					<img class="mb-4"
 						src="<c:url value="${fn:escapeXml(rank.URLBadge)}" />"
 						alt="Icon ${fn:escapeXml(rank.ranked)}" />
