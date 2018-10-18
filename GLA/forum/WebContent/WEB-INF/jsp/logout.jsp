@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en-gb"
 	lang="en-gb">
 <head>
@@ -30,12 +31,14 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
-					<c:if test="${sessionScope.user != null}">
-						<li><a href="logout"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
-								! D&eacute;connexion
+					<c:if test="${fn:escapeXml(sessionScope.user != null)}">
+						<li><a href="upload"> <c:out
+									value="Connecté en tant que
+								${fn:escapeXml(user)} !"></c:out>
 						</a></li>
+						<li><a href="logout">D&eacute;connexion </a></li>
 					</c:if>
-					<c:if test="${sessionScope.user == null}">
+					<c:if test="${fn:escapeXml(sessionScope.user == null)}">
 						<li><a href="login">Non connect&eacute; ! Sign In !</a></li>
 						<li><a href="signup"> Vous n'avez pas de compte ? Sign Up
 								! </a></li>
@@ -51,11 +54,6 @@
 			<h2>You are disconnected ! See you soon !</h2>
 			<iframe src="https://giphy.com/embed/d3JtCNegRi2zgmpG" width="480"
 				height="302" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-			<p>
-				<a
-					href="https://giphy.com/gifs/cheezburger-happy-pokemon-pikachu-d3JtCNegRi2zgmpG">via
-					GIPHY</a>
-			</p>
 		</div>
 
 		<!--  footer -->

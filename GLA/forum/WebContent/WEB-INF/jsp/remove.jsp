@@ -5,7 +5,7 @@
 	lang="en-gb">
 <head>
 
-<title>TOPIC</title>
+<title>${param.title}</title>
 
 <!-- Bootstrap -->
 <link href="fichiers/css/bootstrap.css" rel="stylesheet" />
@@ -13,9 +13,9 @@
 
 <!-- css style -->
 <link href="fichiers/css/style.css" rel="stylesheet" />
+
 </head>
 <body>
-
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -47,36 +47,45 @@
 		</div>
 	</div>
 	<div class="container" style="padding-top: 7%;">
-		<form action="topic" method="post">
+		<form action="remove.jsp" method="post">
+			<h1>Êtes-vous sûr.e de vouloir supprimer ce message ?</h1>
+			<table class="table table-striped table-bordered table-hover">
+				<thead class="text-center">
+					<tr>
+						<th style="text-align: center;" width="150">Author</th>
+						<th style="text-align: center;">Message</th>
+					</tr>
+				</thead>
 
 
-			<div class="py-5  text-center">
-				<h2>Write a new topic</h2>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="form-group">
-						<label>Title of topic *</label> <input name="title" size="25"
-							class="form-control" placeholder="Title for the topic*"
-							type="text" tabindex="1" required
-							value="<c:out value="${param.title}"/>"></input> <label>Content
-							of topic *</label>
-						<textarea name="content" size="5000" class="form-control"
-							placeholder="Message for the topic*" rows="4" tabindex="2"
-							required value="<c:out value="${param.content}"/>"></textarea>
-					</div>
+				<tbody>
+					<tr class="text-center">
+						<td><img class="mb-4" height="64" width="64" name="photo"
+							src="<c:url value="${fn:escapeXml(photo)}"/>" alt="Icon" />
+							<p>
+								<c:out value="${fn:escapeXml(author)}" />
+							</p></td>
+						<td><p>
+								<c:out value="${fn:escapeXml(content)}" />
+							</p></td>
+					</tr>
+				</tbody>
+			</table>
+			<div style="text-align: center">
+				<div class="form-label-group">
+					<label for="inputPassword">Password</label> <input type="password"
+						class="form-control" placeholder="Password" name="password"
+						required /><span class="erreur">${erreurs['password']}</span>
 				</div>
-				<div class="col-md-12 text-center">
-					<span class="erreur">${erreurs['content']}</span><input
-						type="submit" class="btn btn-success btn-send" value="Post Topic" />
-					<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
-					<span class="erreur">${erreurs['resultat']}</span>
-				</div>
+				<input type="submit" class="btn btn-danger btn-send" role="button"
+					value="Oui, supprimer ce message !" />
+				<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
+				<span class="erreur">${erreurs['resultat']}</span>
 			</div>
 		</form>
 		<!--  footer -->
 		<div id="footer">
-			<div class="container ">
+			<div class="inner">
 				<div class="row">
 					<div class="col-sm-6">
 						<p class="copyright">Made by Solenn KEROULLAS</p>
@@ -91,6 +100,7 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>

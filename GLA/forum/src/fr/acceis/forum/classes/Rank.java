@@ -1,9 +1,24 @@
 package fr.acceis.forum.classes;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Rank.
+ *
+ * @author solenn
+ */
 public class Rank {
+
+	/** The ranked. */
 	private String ranked;
+
+	/** The URL badge. */
 	private String URLBadge;
 
+	/**
+	 * Instantiates a new rank.
+	 *
+	 * @param nbMessages the nb messages
+	 */
 	public Rank(int nbMessages) {
 		if (nbMessages < 20) {
 			setRanked("Novice");
@@ -23,18 +38,38 @@ public class Rank {
 		}
 	}
 
+	/**
+	 * Gets the ranked.
+	 *
+	 * @return the ranked
+	 */
 	public String getRanked() {
 		return ranked;
 	}
 
+	/**
+	 * Sets the ranked.
+	 *
+	 * @param ranked the new ranked
+	 */
 	public void setRanked(String ranked) {
 		this.ranked = ranked;
 	}
 
+	/**
+	 * Gets the URL badge.
+	 *
+	 * @return the URL badge
+	 */
 	public String getURLBadge() {
 		return URLBadge;
 	}
 
+	/**
+	 * Sets the URL badge.
+	 *
+	 * @param uRLBadge the new URL badge
+	 */
 	public void setURLBadge(String uRLBadge) {
 		URLBadge = uRLBadge;
 	}

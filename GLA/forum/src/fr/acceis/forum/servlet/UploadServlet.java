@@ -26,45 +26,52 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UploadServlet.
+ */
+/**
+ * @author solenn
+ *
+ */
 @SuppressWarnings("serial")
 public class UploadServlet extends HttpServlet {
 
+	/** The Constant ATT_ERREURS. */
 	public static final String ATT_ERREURS = "erreurs";
+
+	/** The Constant ATT_RESULTAT. */
 	public static final String ATT_RESULTAT = "resultat";
+
+	/** The get user. */
 	User getUser = null;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String author = (String) req.getSession().getAttribute("user");
+
 		// looking for the user profil into the database
 		DAO<User> DAOUser = null;
-		try {
-			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			getUser = DAOUser.findByName(author);
-		} catch (InstantiationException | IllegalAccessException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		// get message post by the user
-		Message tmpMess = new Message(getUser.getLogin(), "", 0);
+		Message tmpMess = new Message(getUser, "", 0);
 		DAO<Message> DAOMessage = null;
-		try {
-			DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		int nbMessages = 0;
 		try {
+			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
+			getUser = DAOUser.findByName(author);
+			
+			DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 			nbMessages = DAOMessage.findbyID(tmpMess);
-		} catch (InstantiationException | IllegalAccessException | SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -79,6 +86,13 @@ public class UploadServlet extends HttpServlet {
 		req.getRequestDispatcher("/WEB-INF/jsp/upload.jsp").forward(req, resp);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Map<String, String> erreurs = new HashMap<String, String>();
@@ -147,6 +161,12 @@ public class UploadServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Check extension.
+	 *
+	 * @param name the name
+	 * @return true, if successful
+	 */
 	public boolean checkExtension(String name) {
 		// check extention of file send
 		String format = "none";

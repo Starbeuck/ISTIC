@@ -5,17 +5,32 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import fr.acceis.forum.classes.FilThread;
-import fr.acceis.forum.classes.Message;
+import fr.acceis.forum.classes.Role;
 import fr.acceis.forum.classes.User;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UserDAO.
+ */
+/**
+ * @author solenn
+ *
+ */
 public class UserDAO extends DAO<User> {
 
+	/**
+	 * Instantiates a new user DAO with connection.
+	 *
+	 * @param conn the conn
+	 */
 	public UserDAO(Connection conn) {
 		super(conn);
 		// TODO Auto-generated constructor stub
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.acceis.forum.dao.DAO#create(java.lang.Object)
+	 */
 	@Override
 	public boolean create(User obj) throws InstantiationException, IllegalAccessException, SQLException {
 		boolean rtrn = false;
@@ -29,12 +44,13 @@ public class UserDAO extends DAO<User> {
 		// create new user if it doesnt exist
 		if (ctr == 0) {
 			PreparedStatement newUser = this.connect
-					.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD,AGE,GENDER,CITY) VALUES (?,?,?,?,?)");
+					.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD,AGE,GENDER,CITY, ROLE) VALUES (?,?,?,?,?,?)");
 			newUser.setString(1, obj.getLogin());
 			newUser.setString(2, obj.getPassword());
 			newUser.setInt(3, obj.getAge());
 			newUser.setString(4, obj.getGender());
 			newUser.setString(5, obj.getCity());
+			newUser.setString(6, "User");
 			newUser.executeUpdate();
 			rtrn = true;
 		}
@@ -43,6 +59,9 @@ public class UserDAO extends DAO<User> {
 		return rtrn;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.acceis.forum.dao.DAO#find(java.lang.Object)
+	 */
 	@Override
 	public User find(User obj) throws SQLException, InstantiationException, IllegalAccessException {
 		PreparedStatement stmt = this.connect
@@ -54,9 +73,13 @@ public class UserDAO extends DAO<User> {
 		if (!res.next()) {
 			return null;
 		}
+		
 		return obj;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.acceis.forum.dao.DAO#findByName(java.lang.String)
+	 */
 	@Override
 	public User findByName(String name) throws SQLException, InstantiationException, IllegalAccessException {
 		PreparedStatement stmt = this.connect.prepareStatement("SELECT * FROM USERS WHERE LOGIN = ?");
@@ -68,16 +91,43 @@ public class UserDAO extends DAO<User> {
 		}
 
 		User user = new User(res.getString("LOGIN"), "", res.getInt("AGE"), res.getString("GENDER"),
-				res.getString("CITY"), res.getString("PHOTO"));
+				res.getString("CITY"), res.getString("PHOTO"), convert(res.getString("ROLE")));
 		return user;
 	}
 
+	/**
+	 * Convert.
+	 *
+	 * @param role the role
+	 * @return the role
+	 */
+	// converti le role en numéro
+	private Role convert(String role) {
+		switch (role) {
+		case "Invit":
+			return Role.Invit;
+		case "User":
+			return Role.User;
+		case "Modo":
+			return Role.Modo;
+		case "Admin":
+			return Role.Admin;
+		}
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.acceis.forum.dao.DAO#delete(java.lang.Object)
+	 */
 	@Override
 	public boolean delete(User obj) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.acceis.forum.dao.DAO#update(java.lang.Object)
+	 */
 	@Override
 	public boolean update(User obj) throws SQLException {
 		boolean rtrn = false;
@@ -90,6 +140,9 @@ public class UserDAO extends DAO<User> {
 		return rtrn;
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.acceis.forum.dao.DAO#findbyID(java.lang.Object)
+	 */
 	@Override
 	public int findbyID(User obj) throws SQLException, InstantiationException, IllegalAccessException {
 		// TODO Auto-generated method stub

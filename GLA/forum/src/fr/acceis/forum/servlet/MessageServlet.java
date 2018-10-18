@@ -12,20 +12,49 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Message;
+import fr.acceis.forum.classes.User;
 import fr.acceis.forum.dao.DAO;
 import fr.acceis.forum.dao.HSQLDBConnection;
 import fr.acceis.forum.dao.MessageDAO;
 import fr.acceis.forum.dao.ThreadDAO;
+import fr.acceis.forum.dao.UserDAO;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MessageServlet.
+ */
+/**
+ * @author solenn
+ *
+ */
 @SuppressWarnings("serial")
 public class MessageServlet extends HttpServlet {
+
+	/** The Constant CHAMP_TITLE. */
 	public static final String CHAMP_TITLE = "title";
+
+	/** The Constant CHAMP_CONTENT. */
 	public static final String CHAMP_CONTENT = "content";
+
+	/** The Constant ATT_ERREURS. */
 	public static final String ATT_ERREURS = "erreurs";
+
+	/** The Constant ATT_RESULTAT. */
 	public static final String ATT_RESULTAT = "resultat";
+
+	/** The title. */
 	String title = "";
+
+	/** The author topic. */
 	String authorTopic = "";
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		title = req.getParameter("title");
@@ -33,9 +62,29 @@ public class MessageServlet extends HttpServlet {
 		req.getRequestDispatcher("/WEB-INF/jsp/message.jsp").forward(req, resp);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String author = (String) req.getSession().getAttribute("user");
+
+		DAO<User> DAOUser = null;
+		User auth = null;
+
+		// Get user from auth
+		try {
+			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
+			auth = DAOUser.findByName(author);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
 		String content = req.getParameter("content");
 
 		Map<String, String> erreurs = new HashMap<String, String>();
@@ -53,15 +102,15 @@ public class MessageServlet extends HttpServlet {
 			try {
 
 				// create new Thread with a new topic
-				FilThread newThread = new FilThread(title, authorTopic,0);
+				FilThread newThread = new FilThread(title, authorTopic, 0);
 
 				// connect to database and create user
 				DAO<FilThread> DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
 				int id = DAOThread.findbyID(newThread);
 
 				// create the first message of the topic
-				Message newMessage = new Message(author, content, id);
-				
+				Message newMessage = new Message(auth, content, id);
+
 				DAO<Message> DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 				Boolean isPosted = DAOMessage.create(newMessage);
 
@@ -77,10 +126,7 @@ public class MessageServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-		} else
-
-		{
+		} else {
 			resultat = "Failed Adding. Please start again.";
 		}
 
@@ -93,6 +139,12 @@ public class MessageServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * Validation.
+	 *
+	 * @param str the str
+	 * @throws Exception the exception
+	 */
 	private void validation(String str) throws Exception {
 		if (str.isEmpty()) {
 			throw new Exception("Please fill the field ! ");

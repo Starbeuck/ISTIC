@@ -20,25 +20,66 @@ import fr.acceis.forum.dao.MessageDAO;
 import fr.acceis.forum.dao.ThreadDAO;
 import fr.acceis.forum.dao.UserDAO;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TopicServlet.
+ */
+/**
+ * @author solenn
+ *
+ */
 @SuppressWarnings("serial")
 public class TopicServlet extends HttpServlet {
+
+	/** The Constant CHAMP_TITLE. */
 	public static final String CHAMP_TITLE = "title";
+
+	/** The Constant CHAMP_CONTENT. */
 	public static final String CHAMP_CONTENT = "content";
+
+	/** The Constant ATT_ERREURS. */
 	public static final String ATT_ERREURS = "erreurs";
+
+	/** The Constant ATT_RESULTAT. */
 	public static final String ATT_RESULTAT = "resultat";
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getRequestDispatcher("/WEB-INF/jsp/topic.jsp").forward(req, resp);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String title = req.getParameter("title");
 		String author = (String) req.getSession().getAttribute("user");
 		String content = req.getParameter("content");
+
+		DAO<User> DAOUser = null;
+		User auth = null;
+
 		Map<String, String> erreurs = new HashMap<String, String>();
 		String resultat = "";
+		try {
+			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
+			auth = DAOUser.findByName(author);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		// not empty login
 		try {
@@ -70,7 +111,7 @@ public class TopicServlet extends HttpServlet {
 					int id = DAOThread.findbyID(newThread);
 
 					// create the first message of the topic
-					Message newMessage = new Message(author, content, id);
+					Message newMessage = new Message(auth, content, id);
 					DAO<Message> DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 					Boolean isPosted = DAOMessage.create(newMessage);
 
@@ -102,6 +143,12 @@ public class TopicServlet extends HttpServlet {
 
 	}
 
+	/**
+	 * Validation.
+	 *
+	 * @param str the str
+	 * @throws Exception the exception
+	 */
 	private void validation(String str) throws Exception {
 		if (str.isEmpty()) {
 			throw new Exception("Please fill the field ! ");

@@ -30,8 +30,9 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<c:if test="${fn:escapeXml(sessionScope.user != null)}">
-						<li><a href="upload"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
-								!
+						<li><a href="upload"> <c:out
+									value="Connecté en tant que
+								${fn:escapeXml(user)} !"></c:out>
 						</a></li>
 						<li><a href="logout">D&eacute;connexion </a></li>
 					</c:if>
@@ -47,11 +48,15 @@
 	</div>
 
 	<div class="container" style="padding-top: 7%;">
-		<c:if test="${sessionScope.user != null}">
-			<a class="btn btn-primary" href="topic" role="button">New topic !</a>
-		</c:if>
+		<div>
+			<c:if test="${fn:escapeXml(sessionScope.user != null)}">
+				<a class="btn btn-primary" href="topic" role="button">New topic
+					!</a>
+			</c:if>
+		</div>
 
-		<table class="table table-striped">
+
+		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
 					<th align="center">&nbsp;Topics&nbsp;</th>
@@ -95,7 +100,7 @@
 
 		<!--  footer -->
 		<div id="footer">
-			<div class="container ">
+			<div class="inner">
 				<div class="row">
 					<div class="col-sm-6">
 						<p class="copyright">Made by Solenn KEROULLAS</p>

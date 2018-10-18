@@ -3,7 +3,6 @@ package fr.acceis.forum.Filter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.LogRecord;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -16,15 +15,36 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.acceis.forum.classes.Role;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SessionCheckFilter.
+ *
+ * @author solenn
+ */
 public class SessionCheckFilter implements Filter {
+	
+	/** The acces login. */
 	final String ACCES_LOGIN = "/login";
+	
+	/** The acces message. */
 	final String ACCES_MESSAGE = "/message";
+	
+	/** The acces profil. */
 	final String ACCES_PROFIL = "/profil.jsp";
+	
+	/** The acces thread. */
 	final String ACCES_THREAD = "/thread";
+	
+	/** The acces upload. */
 	final String ACCES_UPLOAD = "/upload";
+	
+	/** The acces remove. */
 	final String ACCES_REMOVE = "/remove";
-
+	
+	/** The url access. */
 	Map<String, Integer> urlAccess;
+	
+	/** The Rules. */
 	final boolean[][] Rules = {
 			// Invit, User, Modo, Admin
 			{ true, true, true, true }, // read
@@ -33,6 +53,9 @@ public class SessionCheckFilter implements Filter {
 			{ false, false, true, true } // delete msg
 	};
 
+	/* (non-Javadoc)
+	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+	 */
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		urlAccess = new HashMap<>();
@@ -44,6 +67,9 @@ public class SessionCheckFilter implements Filter {
 		urlAccess.put(ACCES_REMOVE, 2);
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 */
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -53,7 +79,6 @@ public class SessionCheckFilter implements Filter {
 		// get URL pass into the filter
 		String URL = req.getServletPath();
 		if (URL.substring(0, 1).equals("/")) {
-			System.out.println(URL);
 			URL = URL.substring(1);
 		}
 
@@ -62,16 +87,13 @@ public class SessionCheckFilter implements Filter {
 		Role role = (Role) req.getSession().getAttribute("role");
 
 		if (name == null) {
-			System.out.println("SessionCheck non connecté, salut !");
 			req.setAttribute("URL", URL);
 			request.getRequestDispatcher(ACCES_LOGIN).forward(request, response);
 		} else {
 			Integer right = urlAccess.get(URL);
 			int intRight = convert(role);
 			if (right == null) {
-				System.out.println("URL non reconnu " + URL);
 			} else {
-				System.out.println("SessionCheck connecté ! On passe à la suite " + URL);
 
 				if (!Rules[right][intRight]) {
 					req.getRequestDispatcher("/WEB-INF/jsp/error401.jsp").forward(req, rep);
@@ -79,11 +101,16 @@ public class SessionCheckFilter implements Filter {
 				}
 			}
 		}
-		System.out.println("TOUT S'EST BIEN PASSE !  " + URL);
 		chain.doFilter(req, rep);
 
 	}
 
+	/**
+	 * Convert.
+	 *
+	 * @param role the role
+	 * @return the int
+	 */
 	// converti le role en numéro
 	private int convert(Role role) {
 		switch (role) {
@@ -100,12 +127,10 @@ public class SessionCheckFilter implements Filter {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.servlet.Filter#destroy()
+	 */
 	@Override
 	public void destroy() {
-	}
-
-	public boolean isLoggable(LogRecord record) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

@@ -10,63 +10,68 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.acceis.forum.classes.Role;
 import fr.acceis.forum.classes.User;
 import fr.acceis.forum.dao.DAO;
 import fr.acceis.forum.dao.HSQLDBConnection;
 import fr.acceis.forum.dao.UserDAO;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SignUpServlet.
+ */
+/**
+ * @author solenn
+ *
+ */
 @SuppressWarnings("serial")
 public class SignUpServlet extends HttpServlet {
+	
+	/** The Constant CHAMP_LOGIN. */
 	public static final String CHAMP_LOGIN = "login";
+	
+	/** The Constant CHAMP_PASS. */
 	public static final String CHAMP_PASS = "password";
+	
+	/** The Constant CHAMP_AGE. */
 	public static final String CHAMP_AGE = "age";
+	
+	/** The Constant CHAMP_GENDER. */
 	public static final String CHAMP_GENDER = "gender";
+	
+	/** The Constant CHAMP_CITY. */
 	public static final String CHAMP_CITY = "city";
+	
+	/** The Constant ATT_ERREURS. */
 	public static final String ATT_ERREURS = "erreurs";
+	
+	/** The Constant ATT_RESULTAT. */
 	public static final String ATT_RESULTAT = "resultat";
+	
+	/** The Constant ATT_ALREADY. */
 	public static final String ATT_ALREADY = "already";
 
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(req, resp);
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String login = req.getParameter("login");
-		System.out.println(login);
 		String password = req.getParameter("password");
-		System.out.println(password);
 		String tmpAge = req.getParameter("age");
 		String gender = req.getParameter("gender");
-		System.out.println(gender);
-		System.out.println(tmpAge);
 		String city = req.getParameter("city");
-		System.out.println(city);
 
 		Map<String, String> erreurs = new HashMap<String, String>();
 		String resultat = "";
-
-		// not empty login
-		try {
-			validation(login);
-		} catch (Exception e) {
-			erreurs.put(CHAMP_LOGIN, e.getMessage());
-		}
-
-		// not empty password
-		try {
-			validation(password);
-		} catch (Exception e) {
-			erreurs.put(CHAMP_PASS, e.getMessage());
-		}
-
-		// not empty age or invalid age
-		try {
-			validation(tmpAge);
-		} catch (Exception e) {
-			erreurs.put(CHAMP_AGE, e.getMessage());
-		}
 
 		int age = Integer.valueOf(tmpAge);
 
@@ -77,23 +82,10 @@ public class SignUpServlet extends HttpServlet {
 			erreurs.put(CHAMP_AGE, e.getMessage());
 		}
 
-		// not empty password
-		try {
-			validation(gender);
-		} catch (Exception e) {
-			erreurs.put(CHAMP_GENDER, e.getMessage());
-		}
-
-		// not empty password
-		try {
-			validation(city);
-		} catch (Exception e) {
-			erreurs.put(CHAMP_CITY, e.getMessage());
-		}
 		// summary
 		if (erreurs.isEmpty()) {
 			try {
-				// create user
+				
 				// pick a picture
 				String photo = "";
 				if (gender.equals("Male")) {
@@ -101,7 +93,9 @@ public class SignUpServlet extends HttpServlet {
 				} else {
 					photo = "fichiers/imgs/WonderWoman.png";
 				}
-				User newUser = new User(login, password, age, gender, city, photo);
+				
+				// create user
+				User newUser = new User(login, password, age, gender, city, photo, Role.User);
 
 				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
@@ -129,12 +123,12 @@ public class SignUpServlet extends HttpServlet {
 
 	}
 
-	private void validation(String str) throws Exception {
-		if (str.isEmpty() || str == null) {
-			throw new Exception("Please fill the field ! ");
-		}
-	}
-
+	/**
+	 * Validation age.
+	 *
+	 * @param str the str
+	 * @throws Exception the exception
+	 */
 	private void validationAge(int str) throws Exception {
 		if (str < 18) {
 			throw new Exception("You are too young !");

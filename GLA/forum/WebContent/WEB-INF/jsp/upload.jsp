@@ -31,8 +31,9 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<c:if test="${fn:escapeXml(sessionScope.user != null)}">
-						<li><a href="upload"> Connect&eacute; en tant que <%=session.getAttribute("user")%>
-								!
+						<li><a href="upload"> <c:out
+									value="Connecté en tant que
+								${fn:escapeXml(user)} !"></c:out>
 						</a></li>
 						<li><a href="logout">D&eacute;connexion </a></li>
 					</c:if>

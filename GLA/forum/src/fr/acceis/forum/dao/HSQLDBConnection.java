@@ -3,9 +3,18 @@ package fr.acceis.forum.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HSQLDBConnection.
+ */
+/**
+ * @author solenn
+ *
+ */
 public class HSQLDBConnection {
+	
+	/** The Constant QUERIES. */
 	public final static String[] QUERIES = {
 			"CREATE TABLE USERS (ID INT IDENTITY PRIMARY KEY, LOGIN VARCHAR(255), PASSWORD VARCHAR(255), AGE INT, GENDER VARCHAR(10), CITY VARCHAR(50))", // increment
 			"ALTER TABLE USERS ADD CONSTRAINT UNIQUE_LOGIN UNIQUE(login)",
@@ -23,10 +32,23 @@ public class HSQLDBConnection {
 			"INSERT INTO MESSAGE (TITLE, AUTHOR) VALUES('pierre', 'hello pierrou', 1)",
 			"INSERT INTO MESSAGE (TITLE, AUTHOR) VALUES('paul', 'hello polo', 2)", };
 
+	/** The con. */
 	static Connection con = null;
+	
+	/**
+	 * Gets the connection.
+	 *
+	 * @return the connection
+	 * @throws InstantiationException the instantiation exception
+	 * @throws IllegalAccessException the illegal access exception
+	 * @throws ClassNotFoundException the class not found exception
+	 * @throws SQLException the SQL exception
+	 */
 	public static Connection getConnection()
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
 		Class.forName("org.sqlite.JDBC");
+		
+		//check if connection exist or not - singleton
 		if (con == null) {
 			con = DriverManager
 					.getConnection("jdbc:sqlite:/home/solenn/Documents/GLA/ForumTP/forum/data/db/forum.db", "sa", "");
