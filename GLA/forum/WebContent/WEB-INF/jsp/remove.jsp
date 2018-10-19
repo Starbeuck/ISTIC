@@ -72,7 +72,7 @@
 				</tbody>
 			</table>
 			<div style="text-align: center">
-				<div class="form-label-group">
+				<div style="width : 30%;">
 					<label for="inputPassword">Password</label> <input type="password"
 						class="form-control" placeholder="Password" name="password"
 						required /><span class="erreur">${erreurs['password']}</span>

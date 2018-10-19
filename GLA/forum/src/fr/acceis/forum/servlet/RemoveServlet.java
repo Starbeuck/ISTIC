@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Message;
+import fr.acceis.forum.classes.Passwords;
 import fr.acceis.forum.classes.User;
 import fr.acceis.forum.dao.DAO;
 import fr.acceis.forum.dao.HSQLDBConnection;
@@ -69,11 +70,9 @@ public class RemoveServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String password = req.getParameter("password");
 		String currenThread = (String) req.getSession().getAttribute("currentThread");
-		String currenAuthThread = (String) req.getSession().getAttribute("currentAuthThread");
+		req.getSession().getAttribute("currentAuthThread");
 		String passSession = (String) req.getSession().getAttribute("password");
 		Map<String, String> erreurs = new HashMap<String, String>();
-		String resultat = "";
-
 		DAO<Message> DAOMessage = null;
 		DAO<User> DAOUser = null;
 		DAO<FilThread> DAOThread = null;
@@ -81,34 +80,38 @@ public class RemoveServlet extends HttpServlet {
 		FilThread tmpThread = null;
 		int id = 0;
 
-		if (passSession.equals(password)) {
-			try {
-				DAOUser = new UserDAO(HSQLDBConnection.getConnection());
-				user = DAOUser.findByName(name);
+		try {
+			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
+			user = DAOUser.findByName(name);
 
+			Passwords pass = new Passwords(password, user.getSel());
+			String passw = pass.getPassword();
+			System.out.println(passw);
+			System.out.println(passSession);
+			if (passw.equals(passSession)) {
 				DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
 				tmpThread = DAOThread.findByName(currenThread);
 				id = DAOThread.findbyID(tmpThread);
-				
+
 				Message tmp = new Message(user, content, id);
 				DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 				DAOMessage.delete(tmp);
 
 				resp.sendRedirect("/forum/home");
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+			} else {
+				// forward to requet
+				erreurs.put("resultat", "Wrong PassWord");
+				req.setAttribute("erreurs", erreurs);
+				req.setAttribute("photo", photo);
+				req.setAttribute("content", content);
+				req.setAttribute("author", name);
+				req.getRequestDispatcher("/WEB-INF/jsp/remove.jsp").forward(req, resp);
+
 			}
-		} else {
-			// forward to requet
-			erreurs.put("resultat", "Wrong PassWord");
-			req.setAttribute("erreurs", erreurs);
-			req.setAttribute("photo", photo);
-			req.setAttribute("content", content);
-			req.setAttribute("author", name);
-			req.getRequestDispatcher("/WEB-INF/jsp/remove.jsp").forward(req, resp);
-
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 	}
 }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.acceis.forum.classes.Passwords;
 import fr.acceis.forum.classes.Role;
 import fr.acceis.forum.classes.User;
 import fr.acceis.forum.dao.DAO;
@@ -93,10 +94,11 @@ public class SignUpServlet extends HttpServlet {
 				} else {
 					photo = "fichiers/imgs/WonderWoman.png";
 				}
-				
-				// create user
-				User newUser = new User(login, password, age, gender, city, photo, Role.User);
 
+				Passwords pass = new Passwords(password, Passwords.getNextSalt());
+				// create user
+				User newUser = new User(login, pass.getPassword(), age, gender, city, photo, Role.User, pass.getSalt());
+				
 				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 				Boolean isCreated = DAOUser.create(newUser);
@@ -109,7 +111,7 @@ public class SignUpServlet extends HttpServlet {
 				}
 
 			} catch (Exception e) {
-				erreurs.put(ATT_ALREADY, "Cannot add user to databse");
+				erreurs.put(ATT_ALREADY, "Cannot add user to database");
 			}
 
 		} else {

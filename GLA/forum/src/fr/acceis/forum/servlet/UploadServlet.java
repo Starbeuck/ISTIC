@@ -45,6 +45,13 @@ public class UploadServlet extends HttpServlet {
 
 	/** The get user. */
 	User getUser = null;
+	
+	 // upload settings
+    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
+    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
+    
+    /** The Constant MAX_REQUEST_SIZE. */
+    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
 
 	/*
 	 * (non-Javadoc)
@@ -60,14 +67,16 @@ public class UploadServlet extends HttpServlet {
 		// looking for the user profil into the database
 		DAO<User> DAOUser = null;
 
-		// get message post by the user
-		Message tmpMess = new Message(getUser, "", 0);
+		
 		DAO<Message> DAOMessage = null;
 		
 		int nbMessages = 0;
 		try {
 			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 			getUser = DAOUser.findByName(author);
+			
+			// get message post by the user
+			Message tmpMess = new Message(getUser, "", 0);
 			
 			DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 			nbMessages = DAOMessage.findbyID(tmpMess);
@@ -106,11 +115,6 @@ public class UploadServlet extends HttpServlet {
 
 		// Create a factory for disk-based file items
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-
-		// Sets the size threshold beyond which files are written directly to
-		// disk.
-		// factory.setSizeThreshold(MAX_MEMORY_SIZE);
-
 		// Sets the directory used to temporarily store files that are larger
 		// than the configured size threshold. We use temporary directory for
 		// java
@@ -118,9 +122,6 @@ public class UploadServlet extends HttpServlet {
 
 		// Create a new file upload handler
 		ServletFileUpload upload = new ServletFileUpload(factory);
-
-		// Set overall request size constraint
-		// upload.setSizeMax(MAX_REQUEST_SIZE);
 
 		try {
 			// Parse the request

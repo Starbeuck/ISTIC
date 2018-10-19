@@ -3,8 +3,7 @@ package fr.acceis.forum.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import java.sql.SQLException;import fr.acceis.forum.classes.Passwords;
 import fr.acceis.forum.classes.Role;
 import fr.acceis.forum.classes.User;
 
@@ -44,13 +43,15 @@ public class UserDAO extends DAO<User> {
 		// create new user if it doesnt exist
 		if (ctr == 0) {
 			PreparedStatement newUser = this.connect
-					.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD,AGE,GENDER,CITY, ROLE) VALUES (?,?,?,?,?,?)");
+					.prepareStatement("INSERT INTO USERS (LOGIN, PASSWORD, AGE, GENDER, CITY, PHOTO, ROLE, SEL) VALUES (?,?,?,?,?,?,?,?)");
 			newUser.setString(1, obj.getLogin());
 			newUser.setString(2, obj.getPassword());
 			newUser.setInt(3, obj.getAge());
 			newUser.setString(4, obj.getGender());
 			newUser.setString(5, obj.getCity());
-			newUser.setString(6, "User");
+			newUser.setString(6, obj.getPhoto());
+			newUser.setString(7, "User");
+			newUser.setString(8, obj.getSel());
 			newUser.executeUpdate();
 			rtrn = true;
 		}
@@ -90,8 +91,9 @@ public class UserDAO extends DAO<User> {
 			return null;
 		}
 
-		User user = new User(res.getString("LOGIN"), "", res.getInt("AGE"), res.getString("GENDER"),
-				res.getString("CITY"), res.getString("PHOTO"), convert(res.getString("ROLE")));
+		User user = new User(res.getString("LOGIN"), res.getString("PASSWORD"), res.getInt("AGE"), res.getString("GENDER"),
+				res.getString("CITY"), res.getString("PHOTO"), convert(res.getString("ROLE")), res.getString("SEL"));
+		
 		return user;
 	}
 

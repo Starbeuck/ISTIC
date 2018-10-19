@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.acceis.forum.classes.FilThread;
+import fr.acceis.forum.classes.Passwords;
 import fr.acceis.forum.classes.User;
 import fr.acceis.forum.dao.DAO;
 import fr.acceis.forum.dao.HSQLDBConnection;
@@ -71,35 +72,43 @@ public class LoginServlet extends HttpServlet {
 			try {
 				// connect to database and create user
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
+
 				User real = DAOUser.findByName(login);
 
 				// user has been created
 				if (real != null) {
 
-					String log = real.getLogin();
+					Passwords pass = new Passwords(real.getLogin(), real.getSel());
+					
+					String realPass = real.getPassword();
+					String PassPass = pass.getPassword();
+					if (realPass.equals(PassPass)) {
+						// set cookie session
+						req.getSession().setAttribute("user", real.getLogin());
+						req.getSession().setAttribute("password", PassPass);
+						req.getSession().setAttribute("role", real.getRole());
 
-					// set cookie session
-					req.getSession().setAttribute("user", log);
-					req.getSession().setAttribute("password", password);
-					req.getSession().setAttribute("role", real.getRole());
+						// getting all thread to display on the welcome page
+						ThreadDAO DAOThread = null;
+						ArrayList<FilThread> ListThread = null;
+						try {
+							DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
+							ListThread = DAOThread.getAllTread();
+						} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+								| SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 
-					// getting all thread to display on the welcome page
-					ThreadDAO DAOThread = null;
-					ArrayList<FilThread> ListThread = null;
-					try {
-						DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
-						ListThread = DAOThread.getAllTread();
-					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-							| SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						// forward to request
+						req.setAttribute("threads", ListThread);
+						req.getRequestDispatcher("/WEB-INF/jsp/threads.jsp").forward(req, resp);
+					} else {
+						erreurs.put(ATT_RESULTAT, "Wrong password.");
 					}
 
-					// forward to request
-					req.setAttribute("threads", ListThread);
-					req.getRequestDispatcher("/WEB-INF/jsp/threads.jsp").forward(req, resp);
 				} else {
-					erreurs.put(ATT_RESULTAT, "User doesn't exists or wrong password.");
+					erreurs.put(ATT_RESULTAT, "User doesn't exists");
 				}
 			} catch (InstantiationException | IllegalAccessException | SQLException | ClassNotFoundException e) {
 			}

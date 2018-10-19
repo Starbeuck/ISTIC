@@ -29,6 +29,9 @@ public class User {
 	/** The role. */
 	private Role role;
 	
+	/** The sel. */
+	private String sel;
+	
 	/**
 	 * Instantiates a new user.
 	 *
@@ -39,8 +42,9 @@ public class User {
 	 * @param cit the cit
 	 * @param photo the photo
 	 * @param role the role
+	 * @param sel the sel
 	 */
-	public User(String log, String pw, int a, String sex, String cit, String photo, Role role) {
+	public User(String log, String pw, int a, String sex, String cit, String photo, Role role, String sel) {
 		this.setLogin(log);
 		this.setPassword(pw);
 		this.setAge(a);
@@ -48,6 +52,7 @@ public class User {
 		this.setCity(cit);
 		this.setPhoto(photo);
 		this.setRole(role);
+		this.setSel(sel);
 	}
 	
 	/**
@@ -175,5 +180,25 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+	
+
+	/**
+	 * Gets the sel.
+	 *
+	 * @return the sel
+	 */
+	public String getSel() {
+		return sel;
+	}
+
+	/**
+	 * Sets the sel.
+	 *
+	 * @param sel the new sel
+	 */
+	public void setSel(String sel) {
+		this.sel = sel;
+	}
+
 	
 }

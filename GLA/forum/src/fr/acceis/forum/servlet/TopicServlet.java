@@ -73,6 +73,7 @@ public class TopicServlet extends HttpServlet {
 
 		Map<String, String> erreurs = new HashMap<String, String>();
 		String resultat = "";
+		
 		try {
 			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 			auth = DAOUser.findByName(author);
