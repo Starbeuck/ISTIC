@@ -58,7 +58,7 @@
 		<div class="row justify-content-between">
 			<div class="col-sm-5 py-5  text-center">
 				<img class="mb-4" height="128" width="128"
-					src="<c:url value="${fn:escapeXml(photo)}"/>" alt="Icon" />
+					src="<c:url value="${fn:escapeXml(getUser.photo)}"/>" alt="Icon" />
 				<p>
 					<c:out value="Gender : ${fn:escapeXml(getUser.gender)}"></c:out>
 				</p>

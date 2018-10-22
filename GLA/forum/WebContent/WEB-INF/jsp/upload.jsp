@@ -90,11 +90,9 @@
 			</div>
 		</div>
 
-
-
 		<!--  footer -->
 		<div id="footer">
-			<div class="container ">
+			<div class="inner">
 				<div class="row">
 					<div class="col-sm-6">
 						<p class="copyright">Made by Solenn KEROULLAS</p>

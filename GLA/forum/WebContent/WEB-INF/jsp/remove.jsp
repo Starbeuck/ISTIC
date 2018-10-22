@@ -47,32 +47,33 @@
 		</div>
 	</div>
 	<div class="container" style="padding-top: 7%;">
-		<form action="remove.jsp" method="post">
-			<h1>Êtes-vous sûr.e de vouloir supprimer ce message ?</h1>
-			<table class="table table-striped table-bordered table-hover">
-				<thead class="text-center">
-					<tr>
-						<th style="text-align: center;" width="150">Author</th>
-						<th style="text-align: center;">Message</th>
-					</tr>
-				</thead>
+
+		<h1>Êtes-vous sûr.e de vouloir supprimer ce message ?</h1>
+		<table class="table table-striped table-bordered table-hover">
+			<thead class="text-center">
+				<tr>
+					<th style="text-align: center;" width="150">Author</th>
+					<th style="text-align: center;">Message</th>
+				</tr>
+			</thead>
 
 
-				<tbody>
-					<tr class="text-center">
-						<td><img class="mb-4" height="64" width="64" name="photo"
-							src="<c:url value="${fn:escapeXml(photo)}"/>" alt="Icon" />
-							<p>
-								<c:out value="${fn:escapeXml(author)}" />
-							</p></td>
-						<td><p>
-								<c:out value="${fn:escapeXml(content)}" />
-							</p></td>
-					</tr>
-				</tbody>
-			</table>
+			<tbody>
+				<tr class="text-center">
+					<td><img class="mb-4" height="64" width="64" name="photo"
+						src="<c:url value="${fn:escapeXml(photo)}"/>" alt="Icon" />
+						<p>
+							<c:out value="${fn:escapeXml(author)}" />
+						</p></td>
+					<td><p>
+							<c:out value="${fn:escapeXml(content)}" />
+						</p></td>
+				</tr>
+			</tbody>
+		</table>
+		<form action="remove.jsp" method="post" class="form-signin">
 			<div style="text-align: center">
-				<div style="width : 30%;">
+				<div >
 					<label for="inputPassword">Password</label> <input type="password"
 						class="form-control" placeholder="Password" name="password"
 						required /><span class="erreur">${erreurs['password']}</span>
