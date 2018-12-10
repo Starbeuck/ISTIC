@@ -1,14 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib
-	uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld"
-	prefix="csrf"%>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en-gb"
 	lang="en-gb">
 <head>
 
-<title>FORUM DE GLA</title>
+<title>SIGN UP</title>
 
 <!-- Bootstrap -->
 <link href="fichiers/css/bootstrap.css" rel="stylesheet" />
@@ -51,59 +48,60 @@
 	</div>
 
 	<div class="container" style="padding-top: 7%;">
-		<div>
-			<c:if test="${fn:escapeXml(sessionScope.user != null)}">
-				<a class="btn btn-primary" href="topic" role="button">New topic
-					!</a>
-			</c:if>
+		<div class="container">
+			<div class="py-5  text-center">
+				<h2>Create an account</h2>
+			</div>
+			<form action="signup" method="post">
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label>Username</label><input tabindex="1" type="text"
+							class="form-control" placeholder="Username" required name="login"
+							value="<c:out value="${param.login}"/>" /><span class="erreur">${erreurs['login']}</span>
+						<div class="invalid-feedback" style="width: 100%;">Your
+							username is required.</div>
+					</div>
+					<div class="col-md-6 mb-3">
+						<label>Password</label> <input class="form-control"
+							name="password" size="25" tabindex="2" type="password"
+							placeholder="Password" required /> <span class="erreur">${erreurs['password']}</span>
+						<div class="invalid-feedback">Valid password is required.</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4 mb-3">
+						<label>How old are you ?</label><input type="number" min="18"
+							class="form-control" placeholder="Age" required name="age"
+							tabindex="3" value="<c:out value="${param.age}"/>" /><span
+							class="erreur">${erreurs['age']}</span>
+					</div>
+					<div class="col-md-4 mb-3">
+						<label>Which gender are you ?</label> <select name="gender"
+							class="form-control" tabindex="4">
+							<option>Male</option>
+							<option>Female</option>
+						</select> <span class="erreur">${erreurs['gender']}</span>
+					</div>
+					<div class="col-md-4 mb-3">
+						<label>Where do you live ?</label> <input class="form-control"
+							size="25" tabindex="5" type="text" name="city" required
+							value="<c:out value="${param.city}"/>" /> <span class="erreur">${erreurs['city']}</span>
+					</div>
+				</div>
+
+				<div class="row text-center">
+					<input class="btn btn-theme" name="signup" class="btnmain"
+						value="Create my account !" type="submit" style="margin-top: 5%"
+						tabindex="6" /> <span class="erreur">${erreurs['already']}</span>
+					<p class="${empty erreurs ? 'succes' : 'erreur'}">${resultat}</p>
+				</div>
+			</form>
+
 		</div>
-
-
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr>
-					<th align="center">&nbsp;Topics&nbsp;</th>
-					<th align="center">&nbsp;Auteur&nbsp;</th>
-					<th align="center">&nbsp;R&eacute;ponses&nbsp;</th>
-					<th align="center">&nbsp;Vues&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${threads}" var="thread">
-					<tr>
-						<c:set var="URL">
-							<c:url value="thread.jsp">
-								<c:param name="title" value="${fn:escapeXml(thread.title)}" />
-								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
-							</c:url>
-						</c:set>
-						<c:set var="profil">
-							<c:url value="profil.jsp">
-								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
-							</c:url>
-						</c:set>
-						<td><a href="${fn:escapeXml(URL)}"><c:out
-									value="${fn:escapeXml(thread.title)}"></c:out></a></td>
-						<td align="center" width="130"><c:if
-								test="${sessionScope.user != null}">
-								<a href="${fn:escapeXml(profil)}"><c:out
-										value="${fn:escapeXml(thread.author)}"></c:out></a>
-							</c:if> <c:if test="${sessionScope.user == null}">
-								<c:out value="${fn:escapeXml(thread.author)}"></c:out>
-							</c:if></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">${fn:escapeXml(thread.nbMessage)}</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
-					</tr>
-				</c:forEach>
-
-			</tbody>
-		</table>
-
 		<!--  footer -->
 		<div id="footer">
-			<div class="inner">
+			<div class="container ">
 				<div class="row">
 					<div class="col-sm-6">
 						<p class="copyright">Made by Solenn KEROULLAS</p>
@@ -123,5 +121,4 @@
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 </body>
-
 </html>

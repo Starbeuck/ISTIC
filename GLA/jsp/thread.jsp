@@ -1,24 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib
-	uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld"
-	prefix="csrf"%>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en-gb"
 	lang="en-gb">
 <head>
 
-<title>FORUM DE GLA</title>
+<title>${param.title}</title>
 
 <!-- Bootstrap -->
 <link href="fichiers/css/bootstrap.css" rel="stylesheet" />
 <link href="fichiers/css/bootstrap-theme.css" rel="stylesheet" />
 
 <!-- css style -->
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+	integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+	crossorigin="anonymous" />
 <link href="fichiers/css/style.css" rel="stylesheet" />
 </head>
 <body>
-
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -49,58 +49,65 @@
 			<!--/.nav-collapse -->
 		</div>
 	</div>
-
 	<div class="container" style="padding-top: 7%;">
-		<div>
-			<c:if test="${fn:escapeXml(sessionScope.user != null)}">
-				<a class="btn btn-primary" href="topic" role="button">New topic
-					!</a>
-			</c:if>
+
+		<div class="py-5  text-center">
+			<h2>
+				<c:out value="${fn:escapeXml(param.title)}"></c:out>
+			</h2>
 		</div>
-
-
 		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr>
-					<th align="center">&nbsp;Topics&nbsp;</th>
-					<th align="center">&nbsp;Auteur&nbsp;</th>
-					<th align="center">&nbsp;R&eacute;ponses&nbsp;</th>
-					<th align="center">&nbsp;Vues&nbsp;</th>
+			<thead class="text-center">
+				<tr">
+					<th style="text-align: center;">Author</th>
+					<th style="text-align: center;" width="150">Message</th>
 				</tr>
 			</thead>
+
 			<tbody>
-				<c:forEach items="${threads}" var="thread">
+				<c:forEach items="${messages}" var="message">
 					<tr>
-						<c:set var="URL">
-							<c:url value="thread.jsp">
-								<c:param name="title" value="${fn:escapeXml(thread.title)}" />
-								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
-							</c:url>
-						</c:set>
-						<c:set var="profil">
-							<c:url value="profil.jsp">
-								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
-							</c:url>
-						</c:set>
-						<td><a href="${fn:escapeXml(URL)}"><c:out
-									value="${fn:escapeXml(thread.title)}"></c:out></a></td>
-						<td align="center" width="130"><c:if
-								test="${sessionScope.user != null}">
-								<a href="${fn:escapeXml(profil)}"><c:out
-										value="${fn:escapeXml(thread.author)}"></c:out></a>
-							</c:if> <c:if test="${sessionScope.user == null}">
-								<c:out value="${fn:escapeXml(thread.author)}"></c:out>
+						<td class="row1 align-self-center" align="center" width="2"><img
+							class="mb-4" height="64" width="64"
+							src="<c:url value="${fn:escapeXml(message.author.photo)}"/>"
+							alt="Icon" />
+							<p>
+								<c:out value="${fn:escapeXml(message.author.login)}"></c:out>
+							</p></td>
+						<td class="row2 align-self-center" align="center" width="150"><p>
+								<c:out value="${fn:escapeXml(message.text)}"></c:out>
+							</p> <c:if
+								test="${fn:escapeXml((role eq 'Admin') or (role eq 'Modo'))}">
+								<c:set var="remove">
+									<c:url value="remove.jsp">
+										<c:param name="author"
+											value="${fn:escapeXml(message.author.login)}" />
+										<c:param name="photo"
+											value="${fn:escapeXml(message.author.photo)}" />
+										<c:param name="content" value="${fn:escapeXml(message.text)}" />
+										<c:param name="idThread" value="${fn:escapeXml(param.title)}" />
+									</c:url>
+								</c:set>
+								<a class="btn btn-danger" href="${fn:escapeXml(remove)}"
+									role="button"><i class="fa fa-trash" aria-hidden="true"></i>
+								</a>
 							</c:if></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">${fn:escapeXml(thread.nbMessage)}</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
 					</tr>
 				</c:forEach>
-
 			</tbody>
 		</table>
-
+		<div style="text-align: center">
+			<c:if test="${fn:escapeXml(sessionScope.user != null)}">
+				<c:set var="message">
+					<c:url value="message.jsp">
+						<c:param name="title" value="${fn:escapeXml(param.title)}" />
+						<c:param name="author" value="${fn:escapeXml(param.author)}" />
+					</c:url>
+				</c:set>
+				<a class="btn btn-primary" href="${fn:escapeXml(message)}"
+					role="button">New message !</a>
+			</c:if>
+		</div>
 		<!--  footer -->
 		<div id="footer">
 			<div class="inner">
@@ -118,10 +125,10 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 </body>
-
 </html>

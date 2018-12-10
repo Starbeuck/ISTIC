@@ -1,14 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib
-	uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld"
-	prefix="csrf"%>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en-gb"
 	lang="en-gb">
 <head>
 
-<title>FORUM DE GLA</title>
+<title>LOGIN</title>
 
 <!-- Bootstrap -->
 <link href="fichiers/css/bootstrap.css" rel="stylesheet" />
@@ -49,61 +46,35 @@
 			<!--/.nav-collapse -->
 		</div>
 	</div>
-
 	<div class="container" style="padding-top: 7%;">
-		<div>
-			<c:if test="${fn:escapeXml(sessionScope.user != null)}">
-				<a class="btn btn-primary" href="topic" role="button">New topic
-					!</a>
-			</c:if>
-		</div>
 
+		<form action="login" method="post" class="form-signin">
+			<div class="text-center mb-4">
+				<img class="mb-4" src="fichiers/imgs/pikachu.png" alt="" width="72"
+					height="72" />
+				<h1 class="h3 mb-3 font-weight-normal">Log in !</h1>
 
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-				<tr>
-					<th align="center">&nbsp;Topics&nbsp;</th>
-					<th align="center">&nbsp;Auteur&nbsp;</th>
-					<th align="center">&nbsp;R&eacute;ponses&nbsp;</th>
-					<th align="center">&nbsp;Vues&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${threads}" var="thread">
-					<tr>
-						<c:set var="URL">
-							<c:url value="thread.jsp">
-								<c:param name="title" value="${fn:escapeXml(thread.title)}" />
-								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
-							</c:url>
-						</c:set>
-						<c:set var="profil">
-							<c:url value="profil.jsp">
-								<c:param name="author" value="${fn:escapeXml(thread.author)}" />
-							</c:url>
-						</c:set>
-						<td><a href="${fn:escapeXml(URL)}"><c:out
-									value="${fn:escapeXml(thread.title)}"></c:out></a></td>
-						<td align="center" width="130"><c:if
-								test="${sessionScope.user != null}">
-								<a href="${fn:escapeXml(profil)}"><c:out
-										value="${fn:escapeXml(thread.author)}"></c:out></a>
-							</c:if> <c:if test="${sessionScope.user == null}">
-								<c:out value="${fn:escapeXml(thread.author)}"></c:out>
-							</c:if></td>
-						<td class="row1" align="center" width="50"><p
-								class="topicdetails">${fn:escapeXml(thread.nbMessage)}</p></td>
-						<td class="row2" align="center" width="50"><p
-								class="topicdetails">1234</p></td>
-					</tr>
-				</c:forEach>
+				<div class="form-label-group">
+					<label for="inputEmail">Your username</label> <input
+						class="form-control" placeholder="Username" required autofocus
+						name="username" /> <span class="erreur">${erreurs['login']}</span>
+				</div>
 
-			</tbody>
-		</table>
+				<div class="form-label-group">
+					<label for="inputPassword">Password</label> <input type="password"
+						class="form-control" placeholder="Password" name="password"
+						required /><span class="erreur">${erreurs['password']}</span>
+				</div>
 
-		<!--  footer -->
+				<input class="btn btn-theme" name="login" class="btnmain"
+					value="Login" type="submit" style="margin-top: 5%" /> <span
+					class="erreur">${erreurs['resultat']}</span>
+			</div>
+		</form>
+
+		<!-- footer -->
 		<div id="footer">
-			<div class="inner">
+			<div class="container">
 				<div class="row">
 					<div class="col-sm-6">
 						<p class="copyright">Made by Solenn KEROULLAS</p>
@@ -122,6 +93,7 @@
 
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
-</body>
 
+	</div>
+</body>
 </html>
