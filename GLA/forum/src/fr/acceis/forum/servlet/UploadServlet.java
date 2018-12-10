@@ -25,6 +25,7 @@ import fr.acceis.forum.dao.UserDAO;
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -45,13 +46,16 @@ public class UploadServlet extends HttpServlet {
 
 	/** The get user. */
 	User getUser = null;
-	
-	 // upload settings
-    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
-    
-    /** The Constant MAX_REQUEST_SIZE. */
-    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
+
+	// upload settings
+	private static final int MEMORY_THRESHOLD = 1024 * 1024 * 3; // 3MB
+	private static final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
+
+	/** The Constant MAX_REQUEST_SIZE. */
+	private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
+
+	/** logger */
+	final static Logger logger = Logger.getLogger(UploadServlet.class);
 
 	/*
 	 * (non-Javadoc)
@@ -67,17 +71,16 @@ public class UploadServlet extends HttpServlet {
 		// looking for the user profil into the database
 		DAO<User> DAOUser = null;
 
-		
 		DAO<Message> DAOMessage = null;
-		
+
 		int nbMessages = 0;
 		try {
 			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 			getUser = DAOUser.findByName(author);
-			
+
 			// get message post by the user
 			Message tmpMess = new Message(getUser, "", 0);
-			
+
 			DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 			nbMessages = DAOMessage.findbyID(tmpMess);
 		} catch (Exception e) {
@@ -135,6 +138,7 @@ public class UploadServlet extends HttpServlet {
 				} else if (!item.isFormField()) {
 					String fileName = new File(item.getName()).getName();
 					if (!checkExtension(fileName)) {
+						logger.error(getUser.getLogin() + " try to add a file with wrong extensions");
 						erreurs.put(ATT_RESULTAT, "Wrong extension ! (only .png .jpeg .jpg)");
 					} else {
 						File test = new File("/home/solenn/Documents/GLA/ForumTP/forum/WebContent/fichiers/imgs/Avatar"
@@ -145,6 +149,7 @@ public class UploadServlet extends HttpServlet {
 						// upload image in database
 						DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 						DAOUser.update(getUser);
+						logger.info(getUser.getLogin() + " changes is picture");
 						resultat = "Here your new picture ! ";
 					}
 				}

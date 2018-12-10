@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Message;
 import fr.acceis.forum.classes.User;
@@ -48,6 +50,9 @@ public class MessageServlet extends HttpServlet {
 	/** The author topic. */
 	String authorTopic = "";
 
+	/** logger */
+	final static Logger logger = Logger.getLogger(MessageServlet.class);
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -82,9 +87,11 @@ public class MessageServlet extends HttpServlet {
 			auth = DAOUser.findByName(author);
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e2) {
 			// TODO Auto-generated catch block
+			logger.warn("Failed to find author to post the message");
 			e2.printStackTrace();
 		}
 
+		logger.info(auth.getLogin() + " try to a message");
 		String content = req.getParameter("content");
 
 		Map<String, String> erreurs = new HashMap<String, String>();
@@ -115,8 +122,10 @@ public class MessageServlet extends HttpServlet {
 				Boolean isPosted = DAOMessage.create(newMessage);
 
 				if (isPosted) {
+					logger.info(auth.getLogin() + " post a message");
 					resultat = "New Message Added ! Other users can see it and answer to it";
 				} else {
+					logger.warn(auth.getLogin() + " failed to post a message");
 					erreurs.put(ATT_RESULTAT, "Cannot add message to topic, please contact admin.");
 				}
 

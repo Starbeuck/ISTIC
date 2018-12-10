@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Passwords;
 import fr.acceis.forum.classes.User;
@@ -42,6 +45,8 @@ public class LoginServlet extends HttpServlet {
 	/** The Constant ATT_RESULTAT. */
 	public static final String ATT_RESULTAT = "resultat";
 
+	/** logger */
+	final static Logger logger = Logger.getLogger(LoginServlet.class);
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -74,41 +79,40 @@ public class LoginServlet extends HttpServlet {
 				DAO<User> DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 
 				User real = DAOUser.findByName(login);
-
-				// user has been created
-				if (real != null) {
-
-					Passwords pass = new Passwords(real.getLogin(), real.getSel());
+				logger.info(real.getLogin() + " try to connect");
+				
+				Passwords pass = new Passwords(real.getLogin(), real.getSel());
+				
+				String realPass = real.getPassword();
+				String PassPass = pass.getPassword();
+				
+				if (realPass.equals(PassPass)) {
+					logger.info(real.getLogin() + " is connected");
 					
-					String realPass = real.getPassword();
-					String PassPass = pass.getPassword();
-					if (realPass.equals(PassPass)) {
-						// set cookie session
-						req.getSession().setAttribute("user", real.getLogin());
-						req.getSession().setAttribute("password", PassPass);
-						req.getSession().setAttribute("role", real.getRole());
+					// set cookie session
+					req.getSession().setAttribute("user", real.getLogin());
+					req.getSession().setAttribute("password", PassPass);
+					req.getSession().setAttribute("role", real.getRole());
 
-						// getting all thread to display on the welcome page
-						ThreadDAO DAOThread = null;
-						ArrayList<FilThread> ListThread = null;
-						try {
-							DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
-							ListThread = DAOThread.getAllTread();
-						} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
-								| SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-						// forward to request
-						req.setAttribute("threads", ListThread);
-						req.getRequestDispatcher("/WEB-INF/jsp/threads.jsp").forward(req, resp);
-					} else {
-						erreurs.put(ATT_RESULTAT, "Wrong password.");
+					// getting all thread to display on the welcome page
+					ThreadDAO DAOThread = null;
+					ArrayList<FilThread> ListThread = null;
+					try {
+						DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
+						ListThread = DAOThread.getAllTread();
+					} catch (InstantiationException | IllegalAccessException | ClassNotFoundException
+							| SQLException e1) {
+						// TODO Auto-generated catch block
+						logger.error("Failed to load database");
+						e1.printStackTrace();
 					}
 
+					// forward to request
+					req.setAttribute("threads", ListThread);
+					req.getRequestDispatcher("/WEB-INF/jsp/threads.jsp").forward(req, resp);
 				} else {
-					erreurs.put(ATT_RESULTAT, "User doesn't exists");
+					logger.warn(real.getLogin() + " failed to log in");
+					erreurs.put(ATT_RESULTAT, "Wrong information connexion.");
 				}
 			} catch (InstantiationException | IllegalAccessException | SQLException | ClassNotFoundException e) {
 			}

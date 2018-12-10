@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import fr.acceis.forum.classes.Passwords;
 import fr.acceis.forum.classes.Role;
 import fr.acceis.forum.classes.User;
@@ -51,6 +53,9 @@ public class SignUpServlet extends HttpServlet {
 	
 	/** The Constant ATT_ALREADY. */
 	public static final String ATT_ALREADY = "already";
+
+	/** logger */
+	final static Logger logger = Logger.getLogger(SignUpServlet.class);
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -106,16 +111,20 @@ public class SignUpServlet extends HttpServlet {
 				// user has been created
 				if (isCreated) {
 					resultat = "Success Subscription. You can connect into login.";
+					logger.info(login  + "is a new user !");
 				} else {
-					erreurs.put(ATT_ALREADY, "User already exists ! ");
+					erreurs.put(ATT_ALREADY, "Cannot add user to database. Maybe change login/password.");
+					logger.warn(login  + "failed to add user to databse");
 				}
 
 			} catch (Exception e) {
 				erreurs.put(ATT_ALREADY, "Cannot add user to database");
+				logger.warn(login  + "failed to add user to databse");
 			}
 
 		} else {
 			resultat = "Failed Subscription. Please start again.";
+			logger.warn(login  + "failed to add user to databse");
 		}
 
 		// forward to request

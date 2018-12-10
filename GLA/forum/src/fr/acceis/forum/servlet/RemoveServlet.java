@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import fr.acceis.forum.classes.FilThread;
 import fr.acceis.forum.classes.Message;
 import fr.acceis.forum.classes.Passwords;
@@ -41,6 +43,10 @@ public class RemoveServlet extends HttpServlet {
 	/** The photo. */
 	String photo;
 
+
+	/** logger */
+	final static Logger logger = Logger.getLogger(RemoveServlet.class);
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -86,8 +92,8 @@ public class RemoveServlet extends HttpServlet {
 
 			Passwords pass = new Passwords(password, user.getSel());
 			String passw = pass.getPassword();
-			System.out.println(passw);
-			System.out.println(passSession);
+			logger.info(user.getLogin() + " try to remove a message");
+			
 			if (passw.equals(passSession)) {
 				DAOThread = new ThreadDAO(HSQLDBConnection.getConnection());
 				tmpThread = DAOThread.findByName(currenThread);
@@ -96,11 +102,12 @@ public class RemoveServlet extends HttpServlet {
 				Message tmp = new Message(user, content, id);
 				DAOMessage = new MessageDAO(HSQLDBConnection.getConnection());
 				DAOMessage.delete(tmp);
-
+				logger.info(user.getLogin() + " remove a message");
 				resp.sendRedirect("/forum/home");
 
 			} else {
 				// forward to requet
+				logger.warn(user.getLogin() + " wrong password");
 				erreurs.put("resultat", "Wrong PassWord");
 				req.setAttribute("erreurs", erreurs);
 				req.setAttribute("photo", photo);

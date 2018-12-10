@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Error401Servlet.
@@ -17,12 +19,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 @SuppressWarnings("serial")
 public class Error401Servlet extends HttpServlet {
+
+	/** logger */
+	final static Logger logger = Logger.getLogger(Error401Servlet.class);
 	
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.error("Try to get a forbidden resources");
 		req.getRequestDispatcher("/WEB-INF/jsp/error401.jsp").forward(req, resp);
 	}
 

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import fr.acceis.forum.classes.User;
 
 import fr.acceis.forum.classes.FilThread;
@@ -43,6 +45,9 @@ public class TopicServlet extends HttpServlet {
 	/** The Constant ATT_RESULTAT. */
 	public static final String ATT_RESULTAT = "resultat";
 
+	/** logger */
+	final static Logger logger = Logger.getLogger(SignUpServlet.class);
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -77,6 +82,7 @@ public class TopicServlet extends HttpServlet {
 		try {
 			DAOUser = new UserDAO(HSQLDBConnection.getConnection());
 			auth = DAOUser.findByName(author);
+			logger.warn(author + " failed to be find in to database");
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -118,16 +124,20 @@ public class TopicServlet extends HttpServlet {
 
 					if (isPosted) {
 						resultat = "Topic Created ! Other user can see it and answer to it";
+						logger.info(auth + " create a new topic");
 					} else {
+						logger.warn(auth + " failed to create a new topic");
 						erreurs.put(ATT_RESULTAT, "Cannot add message to topic, please contact admin.");
 					}
 
 				} else {
+					logger.warn(auth + " choose a title that is already taken");
 					erreurs.put(ATT_RESULTAT, "Title already taken. Pick another one please.");
 				}
 
 			} catch (InstantiationException | IllegalAccessException | SQLException e) {
-				erreurs.put(ATT_RESULTAT, "Cannot add thread to databse");
+				logger.error("cannot add thread to database");
+				erreurs.put(ATT_RESULTAT, "Cannot add thread to database");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -135,6 +145,7 @@ public class TopicServlet extends HttpServlet {
 
 		} else {
 			resultat = "Failed Adding. Please start again.";
+			logger.error("Failed to create a new topic");
 		}
 
 		// forward to request

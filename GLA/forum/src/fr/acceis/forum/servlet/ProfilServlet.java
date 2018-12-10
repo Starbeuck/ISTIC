@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import fr.acceis.forum.classes.Message;
 import fr.acceis.forum.classes.Rank;
 import fr.acceis.forum.classes.User;
@@ -26,6 +28,7 @@ import fr.acceis.forum.dao.UserDAO;
  */
 @SuppressWarnings("serial")
 public class ProfilServlet extends HttpServlet {
+	
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
